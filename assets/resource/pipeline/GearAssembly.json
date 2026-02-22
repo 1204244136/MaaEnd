@@ -5,7 +5,8 @@
         "post_delay": 0,
         "next": [
             "GearAssemblyCheckIsAssemblePage",
-            "[JumpBack]SceneEnterMenuGearAssembly"
+            "[JumpBack]ScenePrivateWorldEnterMenuGearAssembly",
+            "[JumpBack]SceneAnyEnterWorld"
         ]
     },
     "GearAssemblyCheckIsAssemblePage": {
