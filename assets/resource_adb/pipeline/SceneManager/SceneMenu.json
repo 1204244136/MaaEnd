@@ -36,5 +36,10 @@
         "action": {
             "type": "Click"
         }
+    },
+    "__ScenePrivateWorldEnterMenuList": {
+        "action": {
+            "type": "Click"
+        }
     }
 }
