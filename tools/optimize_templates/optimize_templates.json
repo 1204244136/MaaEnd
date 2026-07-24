@@ -950,5 +950,6 @@
     "resource/image/AeroSalvage/PlacementSite2": "14c0609d368b99ba7c7c067ca7a62629382501321e6e872acd5cc9c5099a3f03",
     "resource/image/AeroSalvage/Salvage": "7037fad99123f817033590a3186d4135a41b715e0bafe7ba536af97c34485ec7",
     "resource/image/AeroSalvage/Complete": "978630513ae3135b1d672fca52348fe723a7c692f9ec4fb88e1e0b51e312f1f0",
-    "resource/image/AeroSalvage/PlacementSite1": "e001dfecc026f70a878c9ab7f359ccedb00328904edcc6184f82fc9c70a9a99c"
+    "resource/image/AeroSalvage/PlacementSite1": "e001dfecc026f70a878c9ab7f359ccedb00328904edcc6184f82fc9c70a9a99c",
+    "resource/image/DeliveryJobs/Xiranite": "03fb97de39ef4afb97eae60e47d4bfafef5419b3ef3da28ae0b64c16a3bf4733"
 }
