@@ -6,7 +6,8 @@
 
 - `pipeline-data.mjs`：Win32 Pipeline 据点与识别框；
 - `pipeline-adb-data.mjs`：ADB Pipeline 据点与识别框；
-- `sell-data.mjs`：区域售卖入口与区域内据点列表；
+- `sell-data.mjs`：区域售卖入口（含地区流程入口包装节点与地区据点锚点 `SellProductIn{RegionPrefix}Outpost`）与区域内据点列表；
+- `loop-data.mjs`：主循环的地区遍历列表；
 - `session-data.mjs`：自动干员会话的据点注册；
 - `task-data.mjs`：Task 中按缓存强制刷新、售卖优先级、保留规则、地区/据点排列的选项；
 - `selection-data.mjs`：把上游贸易数据预计算为 `assets/data/SellProduct/selection_data.json`，供 Go Service 运行时使用。
@@ -20,19 +21,19 @@ pnpm generate:SellProduct
 # 仅更新数据文件
 pnpm fetch:zmdmap
 
-# 使用已缓存的数据补齐五语言据点和干员键
+# 使用已缓存的数据补齐五语言据点、干员键和缺失的物品键
 node tools/pipeline-generate/SellProduct/sync-locales.mjs
 
 # 使用已缓存的数据生成部署所需的最小选品数据
 node tools/pipeline-generate/SellProduct/selection-data.mjs
 
 # 等价于在当前目录运行
-npx @joebao/maa-pipeline-generate --config pipeline-config.json
-npx @joebao/maa-pipeline-generate --config sell-config.json
-npx @joebao/maa-pipeline-generate --config session-config.json
-npx @joebao/maa-pipeline-generate --config task-config.json
+pnpm exec maa-pipeline-generate --config pipeline-config.json
+pnpm exec maa-pipeline-generate --config sell-config.json
+pnpm exec maa-pipeline-generate --config session-config.json
+pnpm exec maa-pipeline-generate --config task-config.json
 # 需要生成安卓端（ADB）专用流水线时使用
-npx @joebao/maa-pipeline-generate --config pipeline-adb-config.json
+pnpm exec maa-pipeline-generate --config pipeline-adb-config.json
 ```
 
 `pnpm generate:SellProduct` 会在渲染前根据 `settlement_trade.json` 按游戏据点顺序重排五语言 locale 的据点键，据点名始终覆盖为 zmdmap 当前官方译文，并补齐缺失的据点和干员键；随后生成随应用发布的 `selection_data.json`。
