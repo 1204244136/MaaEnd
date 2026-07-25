@@ -91,7 +91,6 @@ var mapTrackerMoveDefaultParam = MapTrackerMoveParam{
 	StuckMitigators:         []string{"MoveOrDeleteDevice", "Jump"},
 }
 
-
 // PlayerRotationAdjustmentState keeps track of one rotation adjustment
 type PlayerRotationAdjustmentState struct {
 	fromPos         internal.Point // Last position where rotation adjustment started to apply
