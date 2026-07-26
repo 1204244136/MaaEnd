@@ -513,6 +513,51 @@ test("SellProduct 每轮换货前优先检查调度券不足", () => {
     ]);
 });
 
+test("SellProduct 交易完成后重复点击直到获得物品界面消失", () => {
+    const pipeline = readPipeline(
+        new URL("../../../assets/resource/pipeline/SellProduct/SellCore.json", import.meta.url),
+    );
+
+    assert.equal(pipeline.SellProductCheckHeader.recognition, "TemplateMatch");
+    assert.deepEqual(pipeline.SellProductCheckHeader.template, [
+        "SellProduct/SellProductCheckHeader.png",
+    ]);
+    assert.deepEqual(
+        pipeline.SellProductCheckHeader.roi,
+        [
+            577,
+            10,
+            138,
+            479,
+        ],
+    );
+
+    for (const nodeName of [
+        "SellProductSellCheck",
+        "SellProductSellCheckThenLoop",
+    ]) {
+        const node = pipeline[nodeName];
+        assert.deepEqual(node.all_of, ["SellProductCheckHeader"]);
+        assert.equal(node.pre_wait_freezes, undefined);
+        assert.equal(node.custom_action, "RepeatUntilNotFoundAction");
+        assert.deepEqual(node.custom_action_param, {
+            action: "Click",
+            wait_node: "SellProductCheckHeader",
+            repeat_count: 10,
+            interval_ms: 200,
+        });
+        assert.deepEqual(
+            node.target,
+            [
+                35,
+                611,
+                58,
+                57,
+            ],
+        );
+    }
+});
+
 test("SellProduct 缺货物品通过据点锚点标记并在本次任务内共享", () => {
     for (const location of sellProductLocations) {
         const pipeline = readPipeline(
