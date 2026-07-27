@@ -1,9 +1,6 @@
 {
     "GiftOperatorMoveAhead": {
         "desc": "移动尝试接触到干员",
-        "post_delay": 0,
-        "pre_delay": 0,
-        "rate_limit": 0,
         "recognition": {
             "type": "Custom",
             "param": {
@@ -23,6 +20,9 @@
                 }
             }
         },
+        "pre_delay": 0,
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "GiftOperatorMoveLocation3",
             //"GiftOperatorMoveLocation3Move",
@@ -35,11 +35,11 @@
     },
     "GiftOperatorMoveFail": {
         "desc": "移动未能接触到干员，炸掉程序",
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": "Custom",
         "custom_action": "ERROR", //引发一个错误来结束当前任务并留下截图
+        "post_delay": 0,
+        "rate_limit": 0,
         "focus": {
             "Node.Recognition.Succeeded": "$task.GiftOperator.focus.move_fail"
         }
@@ -47,9 +47,7 @@
     "GiftOperatorMoveLocation1": {
         "desc": "转向270度(正西)尝试接触到干员(预设位置1)",
         "max_hit": 2,
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -64,7 +62,9 @@
                     ]
                 }
             }
-        }
+        },
+        "post_delay": 0,
+        "rate_limit": 0
     },
     "GiftOperatorMoveLocation1Move": {
         "desc": "移动尝试接触到干员(预设位置1)",
@@ -98,10 +98,8 @@
     },
     "GiftOperatorMoveLocation2": {
         "desc": "转向345度(北偏西15度)尝试接触到干员(预设位置2)",
-        "post_delay": 0,
-        "pre_delay": 0,
-        "rate_limit": 0,
         "max_hit": 2,
+        "pre_delay": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -116,7 +114,9 @@
                     ]
                 }
             }
-        }
+        },
+        "post_delay": 0,
+        "rate_limit": 0
     },
     "GiftOperatorMoveLocation2Move": {
         "desc": "移动尝试接触到干员(预设位置2)",
@@ -150,10 +150,8 @@
     },
     "GiftOperatorMoveLocation3": {
         "desc": "转向90度(正东)尝试接触到干员(预设位置3)",
-        "post_delay": 0,
-        "pre_delay": 0,
-        "rate_limit": 0,
         "max_hit": 2,
+        "pre_delay": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -168,7 +166,9 @@
                     ]
                 }
             }
-        }
+        },
+        "post_delay": 0,
+        "rate_limit": 0
     },
     "GiftOperatorMoveLocation3Move": {
         "desc": "移动尝试接触到干员(预设位置3)",
