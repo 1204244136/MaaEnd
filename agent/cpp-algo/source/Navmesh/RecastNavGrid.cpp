@@ -1139,7 +1139,7 @@ std::vector<WorldPoint> Slim(const std::vector<WorldPoint>& pts, const Blockers&
             if (d <= eps && !blk.blocked(a, c)
                 && (cfl == nullptr
                     || static_cast<double>(cfl->seg(a, c))
-                        >= std::min(static_cast<double>(cfl->seg(a, b)), static_cast<double>(cfl->seg(b, c))))) {
+                           >= std::min(static_cast<double>(cfl->seg(a, b)), static_cast<double>(cfl->seg(b, c))))) {
                 P.erase(P.begin() + static_cast<int64_t>(i));
                 ch = true;
             }
@@ -1185,4 +1185,4 @@ std::vector<WorldPoint> DropLoops(const std::vector<WorldPoint>& pts)
     return P;
 }
 
-}
+} // namespace navmesh::recast
