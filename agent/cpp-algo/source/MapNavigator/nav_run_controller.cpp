@@ -212,11 +212,7 @@ double PointToSegmentDistance(const navmesh::WorldPoint& point, const navmesh::W
 // that point leaves the corridor polyline by more than `slack`. Evaluated per tick at vertex
 // granularity: the chord to a candidate vertex is admissible only while every corridor vertex it
 // spans stays within slack of it, so the lookahead comes to rest on the corner instead of past it.
-double ClampLookaheadToPathSlack(
-    const navmesh::WorldPath& path,
-    const CorridorProjection& projection,
-    double distance,
-    double slack)
+double ClampLookaheadToPathSlack(const navmesh::WorldPath& path, const CorridorProjection& projection, double distance, double slack)
 {
     if (path.points.size() < 2 || projection.edge_idx + 1 >= path.points.size() || slack <= 0.0) {
         return distance;
@@ -482,7 +478,10 @@ NavRunTickResult NavRunController::tick(
 
     const double upcoming_turn = UpcomingCorridorTurnDeg(plan_.path, *projection, kNavRunUpcomingTurnLookaheadM);
     const double lookahead_distance = ClampLookaheadToPathSlack(
-        plan_.path, *projection, chooseLookaheadDistance(route, sprint_active, upcoming_turn), kNavRunLookaheadPathSlackM);
+        plan_.path,
+        *projection,
+        chooseLookaheadDistance(route, sprint_active, upcoming_turn),
+        kNavRunLookaheadPathSlackM);
     const navmesh::WorldPoint lookahead = LookaheadOnCorridor(plan_.path, *projection, lookahead_distance);
     const double corridor_heading = NaviMath::CalcTargetRotation(position.x, position.y, lookahead.x, lookahead.y);
 

@@ -16,9 +16,6 @@
     },
     "StuckRepairAction": {
         "desc": "尝试修复卡死",
-        "focus": {
-            "Node.Action.Starting": "$task.OpenGame.focus.stuck_repair"
-        },
         "action": {
             "type": "Custom",
             "param": {
@@ -34,7 +31,10 @@
         "next": [
             "OpenGame",
             "StartUpGameFailed"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "$task.OpenGame.focus.stuck_repair"
+        }
     },
     "ResetStartUpGame": {
         "desc": "重置启动游戏",
@@ -164,9 +164,9 @@
         }
     },
     "StartUpGame": {
+        "desc": "启动游戏,由ADB端option进行覆盖",
         "max_hit": 20,
         "post_delay": 3000,
-        "desc": "启动游戏,由ADB端option进行覆盖",
         "focus": {
             "Node.Action.Failed": "$task.OpenGame.focus.start_app_failed" //多半是Client选错了
         }
@@ -212,7 +212,6 @@
     "CloudEndfieldRetry": {
         "desc": "云终末地重试",
         "max_hit": 20,
-        "post_delay": 5000,
         "recognition": {
             "type": "And",
             "param": {
@@ -225,7 +224,8 @@
         },
         "action": {
             "type": "Click"
-        }
+        },
+        "post_delay": 5000
     },
     "CloudEndfieldRetryText": {
         "desc": "云终末地重试文本",
