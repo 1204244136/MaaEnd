@@ -14,14 +14,14 @@ zmdmap API → tools/pipeline-generate/data/settlement_trade.json（本地缓存
 - `model.mjs`：共享模型，统一定义据点/地区、多语言键和稳定顺序。据点 `LocationId` 由 zmdmap 英文名称派生；只有存在实际 OCR 误识证据时才追加识别候选。地区顺序在这里定义，生成器按 `sellProductRegionsNewestFirst`（新地区优先）输出主循环遍历列表，地区内据点保持模型顺序。
 - 每个模板对应一组「投影 + 模板 + 配置」三件套，投影只提供该模板需要的最小数据；某个模板独有的参数留在对应投影文件，不要塞进共享模型：
 
-| 投影                    | 生成产物                                                      |
+| 投影 | 生成产物 |
 | ----------------------- | ------------------------------------------------------------- |
-| `pipeline-data.mjs`     | Win32 据点 Pipeline（`{Region}/{Location}.json`）             |
-| `pipeline-adb-data.mjs` | ADB 据点 Pipeline                                             |
-| `sell-data.mjs`         | 地区售卖入口（含地区据点锚点 `SellProductIn{Region}Outpost`） |
-| `loop-data.mjs`         | 主循环 `Loop.json` 的地区遍历列表                             |
-| `session-data.mjs`      | `OperatorSession.json` 的据点注册链                           |
-| `task-data.mjs`         | `assets/tasks/SellProduct.json` 的任务选项                    |
+| `pipeline-data.mjs` | Win32 据点 Pipeline（`{Region}/{Location}.json`） |
+| `pipeline-adb-data.mjs` | ADB 据点 Pipeline |
+| `sell-data.mjs` | 地区售卖入口（含地区据点锚点 `SellProductIn{Region}Outpost`） |
+| `loop-data.mjs` | 主循环 `Loop.json` 的地区遍历列表 |
+| `session-data.mjs` | `OperatorSession.json` 的据点注册链 |
+| `task-data.mjs` | `assets/tasks/SellProduct.json` 的任务选项 |
 
 - `selection-data.mjs`：把上游贸易数据预计算为 `assets/data/SellProduct/selection_data.json`（Go 运行时数据）；活动物品临时排除项集中在这里，上游移除活动数据后应清理并重新生成。
 - `sync-locales.mjs`：同步五语言 locale——按游戏据点顺序重排据点键、据点名始终覆盖为 zmdmap 当前官方译文、补齐缺失的据点/干员/物品键（中文名与既有键相同的货品复用旧键）。

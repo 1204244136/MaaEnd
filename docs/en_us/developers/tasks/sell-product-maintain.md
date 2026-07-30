@@ -58,11 +58,11 @@ Task-level termination: if outpost management is locked, SceneManager cannot ent
 
 ### Selection Strategy (single-choice task option)
 
-| Strategy         | Ordering                                              | Notes                                                       |
+| Strategy | Ordering | Notes |
 | ---------------- | ----------------------------------------------------- | ----------------------------------------------------------- |
-| Rarity (default) | rarity desc → unit price desc → stable source order   | may pick bottom half-visible items with unknown stock       |
-| Price            | unit price desc → rarity desc → stable order          | same as above                                               |
-| Stock            | local stock desc → unit price → rarity → stable order | requires recognized stock and the user's minimum unit price |
+| Rarity (default) | rarity desc → unit price desc → stable source order | may pick bottom half-visible items with unknown stock |
+| Price | unit price desc → rarity desc → stable order | same as above |
+| Stock | local stock desc → unit price → rarity → stable order | requires recognized stock and the user's minimum unit price |
 
 ### Selection Recognition (`SellProductPriorityItem` custom recognizer)
 
@@ -134,15 +134,15 @@ Selling operator not found / scan failure → stop the task (never trade with th
 
 The generator lives in `tools/pipeline-generate/SellProduct/`. Its data source is the zmdmap cache `tools/pipeline-generate/data/settlement_trade.json`; `model.mjs` centrally defines outposts, regions, and i18n keys, and each `*-data.mjs` is the minimal data projection for its template.
 
-| Maintenance entry               | Generated artifact                                                |
+| Maintenance entry | Generated artifact |
 | ------------------------------- | ----------------------------------------------------------------- |
 | `pipeline(-adb)-template.jsonc` | `pipeline/SellProduct/{Region}/{Location}.json` (Win32/ADB packs) |
-| `sell-template.jsonc`           | `pipeline/SellProduct/{Region}/SellProduct{Region}.json`          |
-| `loop-template.jsonc`           | `pipeline/SellProduct/Loop.json`                                  |
-| `session-template.jsonc`        | `pipeline/SellProduct/OperatorSession.json`                       |
-| `task-template.jsonc`           | `assets/tasks/SellProduct.json`                                   |
-| `sync-locales.mjs`              | five-language locale keys for outposts/operators/items            |
-| `selection-data.mjs`            | `assets/data/SellProduct/selection_data.json`                     |
+| `sell-template.jsonc` | `pipeline/SellProduct/{Region}/SellProduct{Region}.json` |
+| `loop-template.jsonc` | `pipeline/SellProduct/Loop.json` |
+| `session-template.jsonc` | `pipeline/SellProduct/OperatorSession.json` |
+| `task-template.jsonc` | `assets/tasks/SellProduct.json` |
+| `sync-locales.mjs` | five-language locale keys for outposts/operators/items |
+| `selection-data.mjs` | `assets/data/SellProduct/selection_data.json` |
 
 Hand-maintained (untouched by the generator):
 

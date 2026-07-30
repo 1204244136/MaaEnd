@@ -57,11 +57,11 @@ SellProductSellLoop（不限次数，每轮先查调度券）
 
 ### 选品策略（任务选项三选一）
 
-| 策略               | 排序                                  | 备注                                 |
+| 策略 | 排序 | 备注 |
 | ------------------ | ------------------------------------- | ------------------------------------ |
-| 稀有度优先（默认） | 稀有度降序 → 单价降序 → 来源稳定序    | 允许选底部只露名称、库存未知的货品   |
-| 单价优先           | 单价降序 → 稀有度降序 → 稳定序        | 同上                                 |
-| 库存优先           | 仓储数量降序 → 单价 → 稀有度 → 稳定序 | 要求库存已识别，且不低于用户最低单价 |
+| 稀有度优先（默认） | 稀有度降序 → 单价降序 → 来源稳定序 | 允许选底部只露名称、库存未知的货品 |
+| 单价优先 | 单价降序 → 稀有度降序 → 稳定序 | 同上 |
+| 库存优先 | 仓储数量降序 → 单价 → 稀有度 → 稳定序 | 要求库存已识别，且不低于用户最低单价 |
 
 ### 选品识别（`SellProductPriorityItem` 自定义识别器）
 
@@ -133,15 +133,15 @@ SellProductSellLoop（不限次数，每轮先查调度券）
 
 生成器位于 `tools/pipeline-generate/SellProduct/`。数据源为 zmdmap 缓存 `tools/pipeline-generate/data/settlement_trade.json`；`model.mjs` 统一定义据点/地区/多语言键，各 `*-data.mjs` 是对应模板的最小数据投影。
 
-| 维护入口                        | 生成产物                                                        |
+| 维护入口 | 生成产物 |
 | ------------------------------- | --------------------------------------------------------------- |
 | `pipeline(-adb)-template.jsonc` | `pipeline/SellProduct/{Region}/{Location}.json`（Win/ADB 两套） |
-| `sell-template.jsonc`           | `pipeline/SellProduct/{Region}/SellProduct{Region}.json`        |
-| `loop-template.jsonc`           | `pipeline/SellProduct/Loop.json`                                |
-| `session-template.jsonc`        | `pipeline/SellProduct/OperatorSession.json`                     |
-| `task-template.jsonc`           | `assets/tasks/SellProduct.json`                                 |
-| `sync-locales.mjs`              | 五语言据点/干员/物品 locale 键                                  |
-| `selection-data.mjs`            | `assets/data/SellProduct/selection_data.json`                   |
+| `sell-template.jsonc` | `pipeline/SellProduct/{Region}/SellProduct{Region}.json` |
+| `loop-template.jsonc` | `pipeline/SellProduct/Loop.json` |
+| `session-template.jsonc` | `pipeline/SellProduct/OperatorSession.json` |
+| `task-template.jsonc` | `assets/tasks/SellProduct.json` |
+| `sync-locales.mjs` | 五语言据点/干员/物品 locale 键 |
+| `selection-data.mjs` | `assets/data/SellProduct/selection_data.json` |
 
 手工维护（生成器不碰）：
 
