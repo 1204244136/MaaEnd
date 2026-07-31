@@ -81,13 +81,13 @@
     "__WLMarkerStoneShip2_ShipDeparture": {
         "desc": "点击交互按钮，随后等待离港成功（如果点到呼叫船只按钮而非下一站按钮，则会离港失败，此时重头来过）",
         "recognition": "TemplateMatch",
-        "template": "MapTracker/StuckMitigator/InteractButton.png",
         "roi": [
             760,
             330,
             170,
             310
         ],
+        "template": "MapTracker/StuckMitigator/InteractButton.png",
         "order_by": "Score",
         "action": "Custom",
         "custom_action": "AutoAltClickAction",
