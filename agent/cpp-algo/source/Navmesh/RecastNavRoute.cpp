@@ -394,8 +394,7 @@ std::optional<std::vector<WorldPoint>>
                 qs = std::vector<int64_t> { atSeedLayer(pick(*ac_, useC)) };
             }
             else {
-                qs = SpanAstar(
-                    st3, useC, info.cidx, cc3, atSeedLayer(pick(*ac_, useC)), pick(*ag2, useC), mult, &soft, &BIGP, faces);
+                qs = SpanAstar(st3, useC, info.cidx, cc3, atSeedLayer(pick(*ac_, useC)), pick(*ag2, useC), mult, &soft, &BIGP, faces);
             }
             if (qs.has_value()) {
                 on3 = cc3;
@@ -580,8 +579,7 @@ std::optional<std::vector<WorldPoint>>
                 for (int64_t y = 0; y < ny; ++y) {
                     for (int64_t x = 0; x < nx; ++x) {
                         er.at(y, x) = static_cast<uint8_t>(
-                            dist.at(y, x) >= pref.at(y, x) || (dist.at(y, x) >= prefg.at(y, x) && pmd.at(y, x) != 0)
-                            || pm.at(y, x) != 0);
+                            dist.at(y, x) >= pref.at(y, x) || (dist.at(y, x) >= prefg.at(y, x) && pmd.at(y, x) != 0) || pm.at(y, x) != 0);
                     }
                 }
                 // 重寻硬禁穿墙步,不可避穿墙处切开逐子段重寻,原步原样保留
@@ -617,8 +615,7 @@ std::optional<std::vector<WorldPoint>>
                         q2->insert(q2->end(), r2->begin(), r2->end());
                     }
                     else {
-                        const auto r2 = SpanAstar(
-                            st3, ue, info.cidx, ce, sub[a2], { sub[b2] }, multg, &blocked_steps, nullptr);
+                        const auto r2 = SpanAstar(st3, ue, info.cidx, ce, sub[a2], { sub[b2] }, multg, &blocked_steps, nullptr);
                         if (!r2.has_value()) {
                             q2.reset();
                             break;
@@ -660,7 +657,11 @@ std::optional<std::vector<WorldPoint>>
                 blk_green.emplace(lw, &info.segA, &info.segB, onm);
             }
             pp = StringPull(
-                pp, blk_green.has_value() ? *blk_green : blk_gray, &cfl, hs.empty() ? nullptr : &lyo, hs.empty() ? nullptr : &hs);
+                pp,
+                blk_green.has_value() ? *blk_green : blk_gray,
+                &cfl,
+                hs.empty() ? nullptr : &lyo,
+                hs.empty() ? nullptr : &hs);
         }
         if (!taut.empty() && !pp.empty() && std::hypot(pp.front().x - taut.back().x, pp.front().y - taut.back().y) < 1e-9) {
             pp.erase(pp.begin());

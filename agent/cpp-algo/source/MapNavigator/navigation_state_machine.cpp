@@ -979,15 +979,9 @@ bool NavigationStateMachine::TickNavigate()
             }
             if (nav_run_anchor) {
                 nav_run_anchor_index = nav_run_anchor->first;
-                nav_run_result = nav_run_controller_.tick(
-                    session_,
-                    &runtime_state_,
-                    *position_,
-                    route,
-                    param_,
-                    nav_run_anchor->first,
-                    nav_run_anchor->second,
-                    now);
+                nav_run_result =
+                    nav_run_controller_
+                        .tick(session_, &runtime_state_, *position_, route, param_, nav_run_anchor->first, nav_run_anchor->second, now);
             }
         }
     }

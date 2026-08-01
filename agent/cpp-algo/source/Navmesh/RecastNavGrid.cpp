@@ -164,8 +164,7 @@ SpanTable BuildSpans(const std::vector<int64_t>& cell, const std::vector<float>&
     for (int64_t i = 0; i < n; ++i) {
         const int64_t c = cell[ord[i]];
         const float hv = h[ord[i]];
-        const bool fresh =
-            i == 0 || c != cell[ord[i - 1]] || (static_cast<double>(hv) - static_cast<double>(anchor)) > kMergeH;
+        const bool fresh = i == 0 || c != cell[ord[i - 1]] || (static_cast<double>(hv) - static_cast<double>(anchor)) > kMergeH;
         if (fresh) {
             if (cnt) {
                 st.sp_h.push_back(static_cast<float>(acc / static_cast<double>(cnt)));
@@ -1367,10 +1366,10 @@ std::optional<std::vector<float>> LayerOracle::walk(const std::vector<WorldPoint
         const int64_t by = static_cast<int64_t>((pts[i].y - y0_) / kCS);
         const int64_t n = std::max<int64_t>(std::max(std::abs(bx - ax), std::abs(by - ay)), 1);
         for (int64_t k = 0; k <= n; ++k) {
-            const CellPt c { ax + static_cast<int64_t>(std::nearbyint(static_cast<double>(bx - ax) * static_cast<double>(k)
-                                                                     / static_cast<double>(n))),
-                             ay + static_cast<int64_t>(std::nearbyint(static_cast<double>(by - ay) * static_cast<double>(k)
-                                                                     / static_cast<double>(n))) };
+            const CellPt c {
+                ax + static_cast<int64_t>(std::nearbyint(static_cast<double>(bx - ax) * static_cast<double>(k) / static_cast<double>(n))),
+                ay + static_cast<int64_t>(std::nearbyint(static_cast<double>(by - ay) * static_cast<double>(k) / static_cast<double>(n)))
+            };
             if (cells.empty() || !(cells.back() == c)) {
                 cells.push_back(c);
             }
@@ -1396,8 +1395,7 @@ std::optional<std::vector<float>> LayerOracle::walk(const std::vector<WorldPoint
             continue;
         }
         nxt.clear();
-        const double up = kSlope
-            * std::hypot(static_cast<double>(cells[i].x - pc.x), static_cast<double>(cells[i].y - pc.y)) * kCS;
+        const double up = kSlope * std::hypot(static_cast<double>(cells[i].x - pc.x), static_cast<double>(cells[i].y - pc.y)) * kCS;
         for (const float t : nb) {
             for (const float c : cur) {
                 const float dh = t - c;

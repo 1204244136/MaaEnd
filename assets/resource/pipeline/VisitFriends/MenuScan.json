@@ -128,13 +128,13 @@
         ],
         "pre_delay": 0,
         "post_delay": 0,
-        "attach": {
-            "ready": false
-        },
         "next": [
             "VisitFriendsMenuScanRemarkFallback",
             "VisitFriendsMenuScanScrollFinishDone"
-        ]
+        ],
+        "attach": {
+            "ready": false
+        }
     },
     "VisitFriendsMenuScanScrollFinishDone": {
         "desc": "好友列表已滚动到底部，拜访完成",
