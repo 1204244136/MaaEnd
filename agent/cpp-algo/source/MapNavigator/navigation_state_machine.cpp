@@ -1021,8 +1021,7 @@ bool NavigationStateMachine::TickNavigate()
         }
     }
 
-    const double effective_progress =
-        ObserveNavigationProgress(route, nav_run_result.straight_to_anchor, nav_run_anchor_index, now);
+    const double effective_progress = ObserveNavigationProgress(route, nav_run_result.straight_to_anchor, nav_run_anchor_index, now);
     // Cross-tier escape: follow the ONE planned corridor (arrival above is the success exit). Fast-fail when the
     // corridor makes no genuine progress for too long. Keys on the hard-progress clock, which the escape's own
     // overlay re-applies can't reset, so it trips only on a continuously stuck (walled/unfollowable) escape, never
@@ -1195,10 +1194,9 @@ bool NavigationStateMachine::TickNavigate()
     // stall clock is still gathering, only earlier and stronger: aimed, commanding no turn, and going nowhere.
     // Waiting out the remaining wall clock just spends it walking into the obstacle, so it opens recovery too.
     const bool forward_hold_futile = runtime_state_.flow.futile_forward_reasserts >= kForwardHoldFutileReassertsBeforeRecovery;
-    const bool should_try_recovery = session_->phase() == NaviPhase::Navigate
-                                     && (stalled_ms >= kObstacleRecoveryMinTriggerMs || forward_hold_futile)
-                                     && (effective_progress > kNoProgressMinDistance || waypoint.RequiresStrictArrival())
-                                     && !runtime_state_.cross_tier_escape.active;
+    const bool should_try_recovery =
+        session_->phase() == NaviPhase::Navigate && (stalled_ms >= kObstacleRecoveryMinTriggerMs || forward_hold_futile)
+        && (effective_progress > kNoProgressMinDistance || waypoint.RequiresStrictArrival()) && !runtime_state_.cross_tier_escape.active;
     if (should_try_recovery) {
         const std::optional<DynamicAnchor> anchor = ResolveCurrentAnchor(session_, *position_);
         if (anchor) {
@@ -1307,8 +1305,8 @@ bool NavigationStateMachine::TickNavigate()
                         return true;
                     }
                     LogWarn << "Dynamic recovery detour attempt failed; switching to physical unstick."
-                            << VAR(escalation.detour_attempt_count) << VAR(escalation.jump_attempt_count)
-                            << VAR(post_jump_anchor->first) << VAR(route.progress_distance) << VAR(stalled_ms);
+                            << VAR(escalation.detour_attempt_count) << VAR(escalation.jump_attempt_count) << VAR(post_jump_anchor->first)
+                            << VAR(route.progress_distance) << VAR(stalled_ms);
                 }
                 if (escalated && ExecutePhysicalUnstick(route.route_heading)) {
                     return true;
@@ -1364,8 +1362,11 @@ bool NavigationStateMachine::TickNavigate()
     }
 
     const double heading_error = NaviMath::NormalizeAngle(effective_route_heading - current_heading);
-    const SteeringCommand steering = SteeringController::Update(heading_error, heading_rate_deg, motion_controller_->IsMovingForward(),
-                                                                runtime_state_.steering_rate.turn_latch_sign);
+    const SteeringCommand steering = SteeringController::Update(
+        heading_error,
+        heading_rate_deg,
+        motion_controller_->IsMovingForward(),
+        runtime_state_.steering_rate.turn_latch_sign);
 
     motion_controller_->SetForwardState(true);
 
@@ -1422,11 +1423,9 @@ bool NavigationStateMachine::TickNavigate()
     const double projection_y = nav_run_result.projection_point.y;
     const int nav_run_replan_reason = static_cast<int>(nav_run_result.replanned_with);
     LogDebug << "TickNavigate corridor target." << VAR(session_->current_node_idx()) << VAR(waypoint.x) << VAR(waypoint.y)
-             << VAR(waypoint.RequiresStrictArrival()) << VAR(lookahead_x) << VAR(lookahead_y)
-             << VAR(projection_x) << VAR(projection_y)
-             << VAR(nav_run_result.remaining_to_anchor)
-             << VAR(nav_run_result.straight_to_anchor) << VAR(nav_run_result.passed_run_waypoints) << VAR(nav_run_replan_reason)
-             << VAR(route.along_track_remaining)
+             << VAR(waypoint.RequiresStrictArrival()) << VAR(lookahead_x) << VAR(lookahead_y) << VAR(projection_x) << VAR(projection_y)
+             << VAR(nav_run_result.remaining_to_anchor) << VAR(nav_run_result.straight_to_anchor)
+             << VAR(nav_run_result.passed_run_waypoints) << VAR(nav_run_replan_reason) << VAR(route.along_track_remaining)
              << VAR(route.cross_track) << VAR(route.projection_anchor) << VAR(arrival_distance) << VAR(position_->zone_id)
              << VAR(stalled_ms);
 
@@ -1434,11 +1433,10 @@ bool NavigationStateMachine::TickNavigate()
         std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - tick_started_at).count();
     LogDebug << "TickNavigate steering decision." << VAR(current_heading) << VAR(route.route_heading) << VAR(effective_route_heading)
              << VAR(nav_run_result.has_corridor_heading) << VAR(nav_run_result.cross_track) << VAR(nav_run_result.upcoming_turn_deg)
-             << VAR(heading_rate_deg) << VAR(heading_rate_raw_delta_deg) << VAR(heading_rate_gap_ms)
-             << VAR(heading_rate_gap_ticks) << VAR(heading_error)
-             << VAR(steering.yaw_delta_deg) << VAR(issued_delta_deg) << VAR(turn_achieved_deg) << VAR(turn_residual_deg)
-             << VAR(turn_elapsed_ms) << VAR(route.waypoint_distance) << VAR(route.on_route) << VAR(degraded_fix) << VAR(held_fix_streak)
-             << VAR(capture_ms) << VAR(fix_age_ms) << VAR(tick_gap_ms) << VAR(tick_compute_ms);
+             << VAR(heading_rate_deg) << VAR(heading_rate_raw_delta_deg) << VAR(heading_rate_gap_ms) << VAR(heading_rate_gap_ticks)
+             << VAR(heading_error) << VAR(steering.yaw_delta_deg) << VAR(issued_delta_deg) << VAR(turn_achieved_deg)
+             << VAR(turn_residual_deg) << VAR(turn_elapsed_ms) << VAR(route.waypoint_distance) << VAR(route.on_route) << VAR(degraded_fix)
+             << VAR(held_fix_streak) << VAR(capture_ms) << VAR(fix_age_ms) << VAR(tick_gap_ms) << VAR(tick_compute_ms);
 
     // Collect routes: keep sprint for travel but drop to walking speed once near a COLLECT point (cancels any
     // active sprint), so the detection-stop can land before we overrun the collectible. No-op off collect

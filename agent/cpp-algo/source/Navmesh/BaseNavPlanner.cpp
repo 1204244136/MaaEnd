@@ -436,8 +436,7 @@ bool BaseNavPlanner::isRouteSegmentDrivable(uint16_t zone_id, const WorldPoint& 
     for (const double side : { 1.0, -1.0 }) {
         const double ox = -uy * half_width * side;
         const double oy = ux * half_width * side;
-        if (!segmentHeightWalkable(
-                zone_id, { .x = head.x + ox, .y = head.y + oy }, { .x = tail.x + ox, .y = tail.y + oy })) {
+        if (!segmentHeightWalkable(zone_id, { .x = head.x + ox, .y = head.y + oy }, { .x = tail.x + ox, .y = tail.y + oy })) {
             return false;
         }
     }

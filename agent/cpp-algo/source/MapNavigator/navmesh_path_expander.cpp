@@ -1198,8 +1198,8 @@ bool AppendGeneratedNavmeshWaypoints(
                 // what the route already judged this passage needs, and nothing out here knows better. An
                 // unknown width reads as zero, which is the bare centre-line test this has always used.
                 const double required = std::isfinite(swallowed_clearance) ? swallowed_clearance : 0.0;
-                if (!drivability_planner->isRouteSegmentDrivable(
-                        drivable_zone_id, world_path.points[cursor], world_path.points[reach + 1], required)) {
+                if (!drivability_planner
+                         ->isRouteSegmentDrivable(drivable_zone_id, world_path.points[cursor], world_path.points[reach + 1], required)) {
                     break;
                 }
                 swallowed_clearance = std::min(swallowed_clearance, clearance_at(reach + 1));

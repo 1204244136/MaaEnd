@@ -1500,13 +1500,8 @@ std::vector<WorldPoint> StringPull(
 // 的共线剔除连坐掉, 网格锯齿会原样留在终线上。
 // 剔点后自该点起重算高度集: 剔点只会放大可达集, 沿用旧值会把后续弦按更窄的
 // 起点集判死。
-std::vector<WorldPoint> Slim(
-    const std::vector<WorldPoint>& pts,
-    const Blockers& blk,
-    double eps,
-    const ClearanceFloor* cfl,
-    const LayerOracle* lyo,
-    float h)
+std::vector<WorldPoint>
+    Slim(const std::vector<WorldPoint>& pts, const Blockers& blk, double eps, const ClearanceFloor* cfl, const LayerOracle* lyo, float h)
 {
     std::vector<WorldPoint> P = pts;
     std::vector<std::optional<std::vector<float>>> hv;
@@ -1531,16 +1526,15 @@ std::vector<WorldPoint> Slim(
             const double t = L2 == 0.0 ? 0.0 : std::max(0.0, std::min(1.0, ((b.x - a.x) * ux + (b.y - a.y) * uy) / L2));
             const double d = std::hypot(b.x - a.x - t * ux, b.y - a.y - t * uy);
             bool ok = d <= eps && !blk.blocked(a, c)
-                && (cfl == nullptr
-                    || static_cast<double>(cfl->seg(a, c))
-                        >= std::min(static_cast<double>(cfl->seg(a, b)), static_cast<double>(cfl->seg(b, c))));
+                      && (cfl == nullptr
+                          || static_cast<double>(cfl->seg(a, c))
+                                 >= std::min(static_cast<double>(cfl->seg(a, b)), static_cast<double>(cfl->seg(b, c))));
             std::optional<std::vector<float>> nh;
             if (ok && lyo != nullptr) {
                 nh = hv[i - 1].has_value() ? lyo->walk({ a, c }, *hv[i - 1]) : std::nullopt;
-                ok = nh.has_value() && hv[i + 1].has_value()
-                    && std::all_of(hv[i + 1]->begin(), hv[i + 1]->end(), [&](float v) {
-                           return std::find(nh->begin(), nh->end(), v) != nh->end();
-                       });
+                ok = nh.has_value() && hv[i + 1].has_value() && std::all_of(hv[i + 1]->begin(), hv[i + 1]->end(), [&](float v) {
+                         return std::find(nh->begin(), nh->end(), v) != nh->end();
+                     });
             }
             if (ok) {
                 P.erase(P.begin() + static_cast<int64_t>(i));
@@ -1634,7 +1628,9 @@ std::vector<WorldPoint> WidenCorners(
             const double out = std::atan2(uy - vy, ux - vx);
             const double fa = cfl != nullptr ? static_cast<double>(cfl->seg(a, b)) - kClrTol : -1.0;
             const double fc = cfl != nullptr ? static_cast<double>(cfl->seg(b, c)) - kClrTol : -1.0;
-            const auto dev = [&](double t) { return std::abs(std::remainder(t - out, 2.0 * std::numbers::pi)); };
+            const auto dev = [&](double t) {
+                return std::abs(std::remainder(t - out, 2.0 * std::numbers::pi));
+            };
             std::vector<double> order = ang;
             std::stable_sort(order.begin(), order.end(), [&](double p, double q) { return dev(p) < dev(q); });
             const double turn = ux * vx + uy * vy;
@@ -1653,9 +1649,7 @@ std::vector<WorldPoint> WidenCorners(
                     }
                     const double v = CellValue(dist, x0, y0, cs, q);
                     if (v > best + 1e-9
-                        && (cfl == nullptr
-                            || (static_cast<double>(cfl->seg(a, q)) >= fa
-                                && static_cast<double>(cfl->seg(q, c)) >= fc))) {
+                        && (cfl == nullptr || (static_cast<double>(cfl->seg(a, q)) >= fa && static_cast<double>(cfl->seg(q, c)) >= fc))) {
                         best = v;
                         pick = q;
                         have = true;

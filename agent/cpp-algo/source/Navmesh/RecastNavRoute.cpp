@@ -295,8 +295,7 @@ std::optional<std::vector<WorldPoint>>
     Grid<float> cf(nx, ny, 0.0F);
     for (size_t i = 0; i < multg.v.size(); ++i) {
         const float c = std::min(std::max((tgt.v[i] - dist.v[i]) / tgt.v[i], 0.0F), 1.0F);
-        const float cdef =
-            std::min(std::max((static_cast<float>(kR) - dist.v[i]) / static_cast<float>(kR), 0.0F), 1.0F);
+        const float cdef = std::min(std::max((static_cast<float>(kR) - dist.v[i]) / static_cast<float>(kR), 0.0F), 1.0F);
         multg.v[i] = 1.0F + static_cast<float>(kLam) * c + static_cast<float>(kLamR) * cdef * cdef;
         cf.v[i] = std::min(dist.v[i], tgt.v[i]);
     }

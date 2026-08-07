@@ -177,8 +177,8 @@ double CornerCommitDistance(const navmesh::WorldPath& path, size_t vertex, doubl
     return std::min(commit_distance, clearance / cut_per_unit);
 }
 
-navmesh::WorldPoint LookaheadOnCorridor(const navmesh::WorldPath& path, const CorridorProjection& projection, double distance,
-                                        double commit_distance)
+navmesh::WorldPoint
+    LookaheadOnCorridor(const navmesh::WorldPath& path, const CorridorProjection& projection, double distance, double commit_distance)
 {
     if (path.points.empty()) {
         return projection.point;
@@ -237,8 +237,7 @@ navmesh::WorldPoint LookaheadOnCorridor(const navmesh::WorldPath& path, const Co
     return path.points.back();
 }
 
-double CorridorAimHeading(const NaviPosition& position, const navmesh::WorldPoint& anchor,
-                          const navmesh::WorldPoint& lookahead)
+double CorridorAimHeading(const NaviPosition& position, const navmesh::WorldPoint& anchor, const navmesh::WorldPoint& lookahead)
 {
     const double dx = lookahead.x - anchor.x;
     const double dy = lookahead.y - anchor.y;
@@ -248,8 +247,7 @@ double CorridorAimHeading(const NaviPosition& position, const navmesh::WorldPoin
         return NaviMath::CalcTargetRotation(position.x, position.y, lookahead.x, lookahead.y);
     }
     const double reach = std::max(kNavRunAimReachMinM, chord);
-    return NaviMath::CalcTargetRotation(position.x, position.y, anchor.x + dx / chord * reach,
-                                        anchor.y + dy / chord * reach);
+    return NaviMath::CalcTargetRotation(position.x, position.y, anchor.x + dx / chord * reach, anchor.y + dy / chord * reach);
 }
 
 double UpcomingCorridorTurnDeg(const navmesh::WorldPath& path, const CorridorProjection& projection, double lookahead_distance)
@@ -343,9 +341,8 @@ bool TrimAuthoredSpanToAgent(navmesh::WorldPath& authored, const NaviPosition& p
         const double dx = b.x - a.x;
         const double dy = b.y - a.y;
         const double len_sq = dx * dx + dy * dy;
-        const double t = len_sq <= std::numeric_limits<double>::epsilon()
-            ? 1.0
-            : ((position.x - a.x) * dx + (position.y - a.y) * dy) / len_sq;
+        const double t =
+            len_sq <= std::numeric_limits<double>::epsilon() ? 1.0 : ((position.x - a.x) * dx + (position.y - a.y) * dy) / len_sq;
         return std::tuple { t, a.x + std::clamp(t, 0.0, 1.0) * dx, a.y + std::clamp(t, 0.0, 1.0) * dy };
     };
 
@@ -477,8 +474,7 @@ void NavRunController::recordSpeedSample(const NaviPosition& position, std::chro
         // restarts instead of carrying the discontinuity.
         const int64_t span_ms = ElapsedMs(last.at, now);
         const double span_sec = static_cast<double>(span_ms) / 1000.0;
-        if (span_sec <= 0.0 || tick_seq_ - last.tick_seq > kNavRunSpeedMaxSampleGapTicks
-            || step > kNavRunSpeedJumpMaxPxPerSec * span_sec) {
+        if (span_sec <= 0.0 || tick_seq_ - last.tick_seq > kNavRunSpeedMaxSampleGapTicks || step > kNavRunSpeedJumpMaxPxPerSec * span_sec) {
             speed_samples_.clear();
         }
     }
