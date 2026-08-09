@@ -714,8 +714,7 @@ bool AppendNavmeshWaypoint(
         // 盲走兜底是二维的, 走到目标正上方也算到; 有声明时让它兜就等于把错层吞回去
         if (target.deck_y) {
             LogError << "Failed to plan NAVMESH waypoint on the declared deck." << VAR(state.navmesh_zone) << VAR(state.current_zone)
-                     << VAR(target.point.x) << VAR(target.point.y) << VAR(*target.deck_y)
-                     << VAR(navmesh::ToString(route_result.status));
+                     << VAR(target.point.x) << VAR(target.point.y) << VAR(*target.deck_y) << VAR(navmesh::ToString(route_result.status));
             return false;
         }
         LogWarn << "NAVMESH waypoint not directly reachable; attempting blind-target fallback." << VAR(state.navmesh_zone)

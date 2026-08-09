@@ -684,8 +684,8 @@ std::optional<std::vector<WorldPoint>> routeWindow(
             std::snprintf(buf, sizeof(buf), "%.2f", *goal_deck);
             // 声明的面在表里就是这一跳连不上, 不在表里是这个坐标底下没有那张面
             const std::string tail = atDeck(gv, *goal_deck) >= 0 ? "这一跳连不上, 拆成多段" : "该坐标下没有这张面";
-            dg.err = "目标面不可达 (声明 " + std::string(buf) + ", 终点格里的面 "
-                + (list.empty() ? std::string("无") : "[" + list + "]") + ") — " + tail;
+            dg.err = "目标面不可达 (声明 " + std::string(buf) + ", 终点格里的面 " + (list.empty() ? std::string("无") : "[" + list + "]")
+                     + ") — " + tail;
             return std::nullopt;
         }
         std::tie(as_, dsa) = near(walk, sc);
@@ -1032,16 +1032,7 @@ RecastPlanResult RecastNavEngine::plan(
     const RecastPlanBudget& budget)
 {
     const std::lock_guard<std::mutex> lock(mutex_);
-    return planLocked(
-        zone_name,
-        start,
-        goal,
-        start_floor_y,
-        goal_floor_y,
-        goal_deck_y,
-        blocked,
-        blocked_points,
-        budget);
+    return planLocked(zone_name, start, goal, start_floor_y, goal_floor_y, goal_deck_y, blocked, blocked_points, budget);
 }
 
 RecastPlanResult RecastNavEngine::planLocked(

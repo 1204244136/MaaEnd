@@ -197,13 +197,12 @@ public:
     {
         {
             std::lock_guard<std::mutex> lock(mutex);
-            queue.emplace_back(
-                QueuedTask {
-                    .control = control,
-                    .taskClass = taskClass,
-                    .sequence = nextSequence++,
-                    .function = std::move(function),
-                });
+            queue.emplace_back(QueuedTask {
+                .control = control,
+                .taskClass = taskClass,
+                .sequence = nextSequence++,
+                .function = std::move(function),
+            });
         }
         condition.notify_one();
     }
