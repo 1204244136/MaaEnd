@@ -12,7 +12,7 @@ The core characteristic of EnvironmentMonitoring is **"Data-Driven + Template Ba
 
 The core maintenance points for EnvironmentMonitoring are as follows:
 
-| Module                              | Path                                                                              | Function                                                                                                                                                                                                                                                                           |
+| Module | Path | Function |
 | ----------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Task Entry | `assets/tasks/EnvironmentMonitoring.json` | Interface task definition (no configurable options, controller = Win32-Front / Wlroots / ADB) |
 | Main Flow Pipeline | `assets/resource/pipeline/EnvironmentMonitoring.json` | Main entry node `EnvironmentMonitoringMain`, loops to identify the two monitoring terminals |
@@ -125,10 +125,10 @@ When maintaining `routes.json`, you don't need to manually calculate `Id`. The r
 
 Derived by `model.mjs` from the PascalCase of `environment_monitoring.json.terminals[terminalId].names.en_us` for the observation point's terminal. Currently, there are only two groups in the repository:
 
-| Chinese Name | Station ID                      | Corresponding terminalId | `GoToMonitoringTerminal` Anchor                          |
+| Chinese Name | Station ID | Corresponding terminalId | `GoToMonitoringTerminal` Anchor |
 | ------------ | ------------------------------- | ------------------------ | -------------------------------------------------------- |
-| 城郊监测终端 | `OutskirtsMonitoringTerminal`   | `kitestation_002_1`      | `EnvironmentMonitoringGoToOutskirtsMonitoringTerminal`   |
-| 首墩监测终端 | `MarkerStoneMonitoringTerminal` | `kitestation_004_1`      | `EnvironmentMonitoringGoToMarkerStoneMonitoringTerminal` |
+| 城郊监测终端 | `OutskirtsMonitoringTerminal` | `kitestation_002_1` | `EnvironmentMonitoringGoToOutskirtsMonitoringTerminal` |
+| 首墩监测终端 | `MarkerStoneMonitoringTerminal` | `kitestation_004_1` | `EnvironmentMonitoringGoToMarkerStoneMonitoringTerminal` |
 
 If a new Station appears, **the generator side (`routes.json` + `model.mjs`) requires zero changes**: `MONITORING_TERMINAL_IDS` is automatically derived from `environment_monitoring.json`, and the `GoToMonitoringTerminal` anchor name is concatenated according to the `EnvironmentMonitoringGoTo{Station}` template. However, the following **hand-written linked nodes** referenced by the generated Pipeline must be completed first, otherwise MaaFramework will report "undefined task referenced" at runtime:
 
@@ -235,13 +235,13 @@ The `EnterMap` field must name an existing node under `assets/resource/pipeline/
 
 Every fully adapted entry needs metadata, `CameraSwipeDirection`, and one teleport method: `EnterMap` or `QuickTeleport: true`. Choose the remaining fields by route type:
 
-| Type                         | Map and route fields                                                                                                | Location assertion                        | Runtime behavior                               |
+| Type | Map and route fields | Location assertion | Runtime behavior |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------- |
-| Metadata only                | `MissionId` / `Name` / `Id` only                                                                                    | Omit                                      | Accept and track only; no teleport or photo    |
-| Photo at teleport            | No `MapName` or navigation field; optional `Heading`                                                                | Omit                                      | Teleport → optional `MapTrackerToward` → photo |
-| Navigation (preferred)       | `NavPath`; regular teleports also add `NavZoneId`; optional `Heading`                                               | `NavAssert`; optional with quick teleport | `MapNavigateAction` follows `NavPath` → photo  |
-| `MapTarget` shorthand        | `MapName` + `MapTarget`; optional `MapTargetTier` for cross-tier targets and `MapTargetDeckY` for overlapping decks | `MapAssert`; optional with quick teleport | `MapNavigateAction` NAVMESH → photo            |
-| Legacy `MapPath` / `MapGoal` | `MapName` + the corresponding field; optional `Heading` / `NoEnsureInitialMovementState`                            | `MapAssert`; optional with quick teleport | Legacy action → photo                          |
+| Metadata only | `MissionId` / `Name` / `Id` only | Omit | Accept and track only; no teleport or photo |
+| Photo at teleport | No `MapName` or navigation field; optional `Heading` | Omit | Teleport → optional `MapTrackerToward` → photo |
+| Navigation (preferred) | `NavPath`; regular teleports also add `NavZoneId`; optional `Heading` | `NavAssert`; optional with quick teleport | `MapNavigateAction` follows `NavPath` → photo |
+| `MapTarget` shorthand | `MapName` + `MapTarget`; optional `MapTargetTier` for cross-tier targets and `MapTargetDeckY` for overlapping decks | `MapAssert`; optional with quick teleport | `MapNavigateAction` NAVMESH → photo |
+| Legacy `MapPath` / `MapGoal` | `MapName` + the corresponding field; optional `Heading` / `NoEnsureInitialMovementState` | `MapAssert`; optional with quick teleport | Legacy action → photo |
 
 `CameraMaxHit` and `Replace` are available to every adapted route and do not define a separate route type. Use photo-at-teleport only after in-game verification; missing route data must remain metadata-only. New routes must use `NavPath`, adding `NavZoneId` / `NavAssert` for regular teleports.
 
