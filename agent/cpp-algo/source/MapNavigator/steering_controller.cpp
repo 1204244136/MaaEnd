@@ -63,8 +63,8 @@ SteeringCommand SteeringController::Update(
     const double cmd = std::clamp(p_term, -max_cmd, max_cmd);
     command.yaw_delta_deg = cmd;
     command.issued = std::abs(cmd) >= 2.0;
-    LogDebug << "SteeringController update." << VAR(heading_error) << VAR(pending) << VAR(heading_rate_deg)
-             << VAR(moving_forward) << VAR(turn_latch_sign) << VAR(cmd);
+    LogDebug << "SteeringController update." << VAR(heading_error) << VAR(pending) << VAR(heading_rate_deg) << VAR(moving_forward)
+             << VAR(turn_latch_sign) << VAR(cmd);
     return command;
 }
 
