@@ -18,6 +18,7 @@
 #include "action_executor.h"
 #include "action_wrapper.h"
 #include "collectible_scanner.h"
+#include "latency_observer.h"
 #include "motion_controller.h"
 #include "navi_config.h"
 #include "navi_math.h"
@@ -416,6 +417,8 @@ NavigationStateMachine::NavigationStateMachine(
 
 bool NavigationStateMachine::Run()
 {
+    latency::BeginRun();
+
     if (!Bootstrap()) {
         StopMotion();
         sensitivity::EndRun(maa_context_, true);
@@ -1401,8 +1404,10 @@ bool NavigationStateMachine::TickNavigate()
     motion_controller_->SetForwardState(true);
 
     double issued_delta_deg = 0.0;
+    int64_t steer_send_ms = 0;
     if (steering.issued) {
         const TurnCommandResult steering_result = motion_controller_->ApplySteering(steering.yaw_delta_deg, tick_gap_ms);
+        steer_send_ms = steering_result.send_ms;
         if (steering_result.issued) {
             issued_delta_deg = steering_result.issued_delta_degrees;
         }
@@ -1471,6 +1476,10 @@ bool NavigationStateMachine::TickNavigate()
              << VAR(heading_error) << VAR(steering.yaw_delta_deg) << VAR(issued_delta_deg) << VAR(turn_achieved_deg)
              << VAR(turn_residual_deg) << VAR(turn_elapsed_ms) << VAR(route.waypoint_distance) << VAR(route.on_route) << VAR(degraded_fix)
              << VAR(held_fix_streak) << VAR(capture_ms) << VAR(fix_age_ms) << VAR(tick_gap_ms) << VAR(tick_compute_ms);
+
+    // 只有走到这里的拍才是完整的常规导航拍，语义节点、恢复、丢定位在上面就提前 return 了。
+    latency::RecordStage(latency::Stage::Other, std::max<int64_t>(0, tick_compute_ms - capture_ms - steer_send_ms));
+    latency::RecordTick(maa_context_, runtime_state_.flow.tick_seq, tick_gap_ms);
 
     // Collect routes: keep sprint for travel but drop to walking speed once near a COLLECT point (cancels any
     // active sprint), so the detection-stop can land before we overrun the collectible. No-op off collect
