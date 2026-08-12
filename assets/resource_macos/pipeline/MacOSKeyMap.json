@@ -750,7 +750,7 @@
             }
         }
     },
-    "__MapTrackerStuckMitigator_MoveOrDeleteDevice_CancelMove": {
+    "__MapNavigatorObstacleDevice_CancelMove": {
         "action": {
             "type": "ClickKey",
             "param": {
@@ -758,7 +758,7 @@
             }
         }
     },
-    "__MapTrackerStuckMitigator_MoveOrDeleteDevice_InteractPost": {
+    "__MapNavigatorObstacleDevice_InteractPost": {
         "action": {
             "type": "KeyUp",
             "param": {
@@ -766,7 +766,7 @@
             }
         }
     },
-    "__MapTrackerStuckMitigator_MoveOrDeleteDevice_InteractPre": {
+    "__MapNavigatorObstacleDevice_InteractPre": {
         "action": {
             "type": "KeyDown",
             "param": {
