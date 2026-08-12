@@ -734,22 +734,6 @@
             }
         }
     },
-    "__MapTrackerOpenWorld_GetOnZipline_InteractPost": {
-        "action": {
-            "type": "KeyUp",
-            "param": {
-                "key": 58
-            }
-        }
-    },
-    "__MapTrackerOpenWorld_GetOnZipline_InteractPre": {
-        "action": {
-            "type": "KeyDown",
-            "param": {
-                "key": 58
-            }
-        }
-    },
     "__MapNavigatorObstacleDevice_CancelMove": {
         "action": {
             "type": "ClickKey",
@@ -767,6 +751,22 @@
         }
     },
     "__MapNavigatorObstacleDevice_InteractPre": {
+        "action": {
+            "type": "KeyDown",
+            "param": {
+                "key": 58
+            }
+        }
+    },
+    "__MapTrackerOpenWorld_GetOnZipline_InteractPost": {
+        "action": {
+            "type": "KeyUp",
+            "param": {
+                "key": 58
+            }
+        }
+    },
+    "__MapTrackerOpenWorld_GetOnZipline_InteractPre": {
         "action": {
             "type": "KeyDown",
             "param": {
