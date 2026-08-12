@@ -405,8 +405,8 @@ std::vector<ManualRunnerCase> DiscoverManualRunnerCases(
     const auto& rois = parsed_rois->as_object();
 
     constexpr std::array kGridTypes {
-        GridType::Trade, GridType::Transfer, GridType::PortStorager, GridType::Valuables, GridType::Shipment, GridType::CreditTrade,
-        GridType::Rewards,
+        GridType::Trade,    GridType::Transfer,    GridType::PortStorager, GridType::Valuables,
+        GridType::Shipment, GridType::CreditTrade, GridType::Rewards,
     };
     std::vector<ManualRunnerCase> cases;
     if (options.grid_type) {

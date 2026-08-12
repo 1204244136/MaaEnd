@@ -141,9 +141,8 @@ Verdict Detector::BuildVerdict() const
     }
     verdict.sample_count = total_samples_;
     if (!tick_history_.empty()) {
-        const auto slow = std::count_if(tick_history_.begin(), tick_history_.end(), [this](int64_t ms) {
-            return ms > config_.slow_tick_ms;
-        });
+        const auto slow =
+            std::count_if(tick_history_.begin(), tick_history_.end(), [this](int64_t ms) { return ms > config_.slow_tick_ms; });
         verdict.slow_percent = static_cast<int>(slow * 100 / static_cast<int64_t>(tick_history_.size()));
     }
     return verdict;

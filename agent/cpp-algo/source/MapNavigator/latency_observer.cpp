@@ -34,8 +34,8 @@ void Emit(MaaContext* context, const Verdict& verdict)
     const int64_t other_ms = StageMs(verdict, Stage::Other);
     const int slow_percent = verdict.slow_percent;
     const int64_t sample_count = verdict.sample_count;
-    LogInfo << "Navigation tick latency looks abnormal." << VAR(tick_median_ms) << VAR(screencap_ms) << VAR(image_prep_ms)
-            << VAR(locate_ms) << VAR(steer_ms) << VAR(other_ms) << VAR(slow_percent) << VAR(sample_count);
+    LogInfo << "Navigation tick latency looks abnormal." << VAR(tick_median_ms) << VAR(screencap_ms) << VAR(image_prep_ms) << VAR(locate_ms)
+            << VAR(steer_ms) << VAR(other_ms) << VAR(slow_percent) << VAR(sample_count);
 
     notice::Publish(
         context,

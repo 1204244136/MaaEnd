@@ -268,11 +268,13 @@ GridDetection DetectRewardsGrid(const cv::Mat& image, const cv::Rect& roi)
     cv::Mat stats;
     cv::Mat centroids;
     const int component_count = cv::connectedComponentsWithStats(bright, labels, stats, centroids, kRewardsConnectivity);
+
     struct Candidate
     {
         cv::Rect box;
         double center_y = 0.0;
     };
+
     std::vector<Candidate> candidates;
     for (int index = 1; index < component_count; ++index) {
         const int x = stats.at<int>(index, cv::CC_STAT_LEFT);
@@ -311,9 +313,7 @@ GridDetection DetectRewardsGrid(const cv::Mat& image, const cv::Rect& roi)
         layout.rows = 1;
         std::vector<double> row_tops;
         row_tops.reserve(row.size());
-        std::ranges::transform(row, std::back_inserter(row_tops), [](const Candidate& item) {
-            return static_cast<double>(item.box.y);
-        });
+        std::ranges::transform(row, std::back_inserter(row_tops), [](const Candidate& item) { return static_cast<double>(item.box.y); });
         // 白色连通域不包含底部彩色色条，因此必须从卡片顶边定位完整 cell；按中心反推会把框上移并裁掉色条。
         const int row_top = cvRound(Median(std::move(row_tops)));
         layout.pitch_y = profile.cell_size;

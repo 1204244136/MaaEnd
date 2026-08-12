@@ -189,9 +189,7 @@ void TestCaseDiscovery()
     WriteTextFile(input_root / "transfer" / "43.png", {});
     WriteTextFile(input_root / "port_storager" / "43.png", {});
     WriteTextFile(input_root / "rewards" / "130.png", {});
-    WriteTextFile(
-        input_root / "rewards" / "130.json",
-        R"({ "item_filters": ["ValuableDepot:SpecialItem", "Isolate:*"] })");
+    WriteTextFile(input_root / "rewards" / "130.json", R"({ "item_filters": ["ValuableDepot:SpecialItem", "Isolate:*"] })");
     WriteTextFile(input_root / "single_roi" / "1177-450-54" / "90.png", {});
 
     const auto all = iconrecognition::test::DiscoverManualRunnerCases(

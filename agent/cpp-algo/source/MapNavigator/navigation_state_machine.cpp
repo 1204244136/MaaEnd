@@ -1511,12 +1511,12 @@ bool NavigationStateMachine::TickNavigate()
     const int64_t tick_compute_ms =
         std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - tick_started_at).count();
     LogDebug << "TickNavigate steering decision." << VAR(tick_seq) << VAR(current_heading) << VAR(route.route_heading)
-             << VAR(effective_route_heading)
-             << VAR(nav_run_result.has_corridor_heading) << VAR(nav_run_result.cross_track) << VAR(nav_run_result.upcoming_turn_deg)
-             << VAR(heading_rate_deg) << VAR(heading_rate_raw_delta_deg) << VAR(heading_rate_gap_ms) << VAR(heading_rate_gap_ticks)
-             << VAR(heading_error) << VAR(steering.yaw_delta_deg) << VAR(issued_delta_deg) << VAR(turn_achieved_deg)
-             << VAR(turn_residual_deg) << VAR(turn_elapsed_ms) << VAR(route.waypoint_distance) << VAR(route.on_route) << VAR(degraded_fix)
-             << VAR(held_fix_streak) << VAR(capture_ms) << VAR(fix_age_ms) << VAR(tick_gap_ms) << VAR(tick_compute_ms);
+             << VAR(effective_route_heading) << VAR(nav_run_result.has_corridor_heading) << VAR(nav_run_result.cross_track)
+             << VAR(nav_run_result.upcoming_turn_deg) << VAR(heading_rate_deg) << VAR(heading_rate_raw_delta_deg)
+             << VAR(heading_rate_gap_ms) << VAR(heading_rate_gap_ticks) << VAR(heading_error) << VAR(steering.yaw_delta_deg)
+             << VAR(issued_delta_deg) << VAR(turn_achieved_deg) << VAR(turn_residual_deg) << VAR(turn_elapsed_ms)
+             << VAR(route.waypoint_distance) << VAR(route.on_route) << VAR(degraded_fix) << VAR(held_fix_streak) << VAR(capture_ms)
+             << VAR(fix_age_ms) << VAR(tick_gap_ms) << VAR(tick_compute_ms);
 
     // 只有走到这里的拍才是完整的常规导航拍，语义节点、恢复、丢定位在上面就提前 return 了。
     latency::RecordStage(latency::Stage::Other, std::max<int64_t>(0, tick_compute_ms - capture_ms - steer_send_ms));

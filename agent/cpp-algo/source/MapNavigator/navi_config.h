@@ -140,7 +140,7 @@ constexpr int32_t kLocalizationLossTimeoutMs = kDynamicRecoveryTotalTimeoutMs;
 constexpr int32_t kRiverFallRecoveryTimeoutMs = kDynamicRecoveryTotalTimeoutMs;   // 30s clean fail-fast
 constexpr double kRiverFallRecoveryClearDistance = kDynamicRecoveryResetDistance; // walked 2m clear of shore
 constexpr int32_t kRiverFallRecoveryPulseMs = kPostHeadingForwardPulseMs;         // proven heading-commit pulse
-constexpr int32_t kRiverFallRecoverySettleMs = 2000;                             // 上岸后的读数要等它稳下来
+constexpr int32_t kRiverFallRecoverySettleMs = 2000;                              // 上岸后的读数要等它稳下来
 
 // Off-route wedge watchdog. Corridor progress (what the stall clocks see) keeps advancing while the authored
 // cursor is pinned far off-route, so a bad latch wanders with zero route progress until the action hard-fails.

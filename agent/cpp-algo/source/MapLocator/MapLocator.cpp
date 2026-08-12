@@ -1674,9 +1674,10 @@ std::optional<LocateResult> MapLocator::Impl::tryTrackingLocate(
                 // 再按预测选下去永远出不来。兜底分数更高时不算证据，那种局面本就该信兜底
                 if (!primaryCloser) {
                     const bool primaryEvidenced = rawPrimaryPos.score >= rawFallbackPos.score;
-                    const bool selfConsistent = primaryEvidenced && arbiterRejectedPrimary.has_value()
+                    const bool selfConsistent =
+                        primaryEvidenced && arbiterRejectedPrimary.has_value()
                         && std::hypot(rawPrimaryPos.x - arbiterRejectedPrimary->x, rawPrimaryPos.y - arbiterRejectedPrimary->y)
-                            <= kArbiterReclaimDriftDistance;
+                               <= kArbiterReclaimDriftDistance;
                     arbiterRejectedPrimaryStreak = selfConsistent ? arbiterRejectedPrimaryStreak + 1 : (primaryEvidenced ? 1 : 0);
                     arbiterRejectedPrimary = primaryEvidenced ? std::optional<MapPosition>(rawPrimaryPos) : std::nullopt;
                     if (arbiterRejectedPrimaryStreak >= kArbiterReclaimStreak) {

@@ -62,6 +62,7 @@ public:
     std::optional<Verdict> EndRun(bool route_failed);
 
     bool fired() const { return fired_; }
+
     // 上一次封好的窗，取走就清空。
     std::optional<WindowSample> TakeLastWindow();
 

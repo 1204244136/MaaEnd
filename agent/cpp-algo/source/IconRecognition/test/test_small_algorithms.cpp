@@ -210,12 +210,8 @@ void TestRewardsGridKeepsRowsWithIndependentHorizontalOrigins()
     const auto grid = iconrecognition::detail::DetectGrid(image, iconrecognition::GridType::Rewards, roi);
     Check(grid.grids.size() == 2, "vertically separated rewards rows must produce independent layouts");
     Check(grid.grids[0].columns == 3 && grid.grids[1].columns == 2, "each rewards row must retain its own column count");
-    Check(
-        grid.grids[0].cells.front().cell_box.x == kFirstRowX,
-        "first rewards row must retain its horizontal origin");
-    Check(
-        grid.grids[1].cells.front().cell_box.x == kSecondRowX,
-        "second rewards row must not inherit the first row horizontal origin");
+    Check(grid.grids[0].cells.front().cell_box.x == kFirstRowX, "first rewards row must retain its horizontal origin");
+    Check(grid.grids[1].cells.front().cell_box.x == kSecondRowX, "second rewards row must not inherit the first row horizontal origin");
     Check(
         std::ranges::all_of(grid.grids[0].cells, [](const auto& cell) { return cell.row == 0; }),
         "first rewards layout must expose global row zero");
@@ -225,9 +221,7 @@ void TestRewardsGridKeepsRowsWithIndependentHorizontalOrigins()
     Check(
         grid.grids[0].cells[0].column == 0 && grid.grids[0].cells[1].column == 1 && grid.grids[0].cells[2].column == 2,
         "first rewards row columns must start at zero and remain contiguous");
-    Check(
-        grid.grids[1].cells[0].column == 0 && grid.grids[1].cells[1].column == 1,
-        "second rewards row columns must restart at zero");
+    Check(grid.grids[1].cells[0].column == 0 && grid.grids[1].cells[1].column == 1, "second rewards row columns must restart at zero");
 }
 
 void TestRewardsGridRenumbersColumnsAfterRoiFiltering()
