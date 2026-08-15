@@ -13,8 +13,8 @@
 
 #include <MaaUtils/Logger.h>
 
-#include "detail/ForegroundTexture.h"
 #include "detail/EdgeOcclusion.h"
+#include "detail/ForegroundTexture.h"
 #include "detail/GridDetector.h"
 #include "detail/GridProfiles.h"
 #include "detail/IconMatcher.h"
@@ -642,8 +642,7 @@ public:
                             performance_ptr);
                         const std::optional<double> recovered_margin =
                             recovered.ranked.size() > 1
-                                ? std::optional<double>(
-                                      recovered.best.diagnostics.score - recovered.ranked[1].diagnostics.score)
+                                ? std::optional<double>(recovered.best.diagnostics.score - recovered.ranked[1].diagnostics.score)
                                 : std::nullopt;
                         if (detail::ShouldAcceptEdgeOcclusionRecovery(
                                 ranking.best.template_index,
@@ -694,15 +693,12 @@ public:
                                      ? (templ.composite ? "composite_union" : "lower_extended")
                                      : ActiveMaskKind(request.grid_type, selected, active)
                                            + (edge_recovery_used
-                                                  ? (edge_occlusion->side == detail::EdgeOcclusionSide::Top ? "+edge_top"
-                                                                                                           : "+edge_bottom")
+                                                  ? (edge_occlusion->side == detail::EdgeOcclusionSide::Top ? "+edge_top" : "+edge_bottom")
                                                   : ""),
-                    .edge_occlusion_side = edge_recovery_used
-                                                ? std::optional<std::string>(
-                                                      edge_occlusion->side == detail::EdgeOcclusionSide::Top ? "top" : "bottom")
-                                                : std::nullopt,
-                    .edge_occlusion_cutoff =
-                        edge_recovery_used ? std::optional<int>(edge_occlusion->cutoff) : std::nullopt,
+                    .edge_occlusion_side = edge_recovery_used ? std::optional<std::string>(
+                                               edge_occlusion->side == detail::EdgeOcclusionSide::Top ? "top" : "bottom")
+                                                              : std::nullopt,
+                    .edge_occlusion_cutoff = edge_recovery_used ? std::optional<int>(edge_occlusion->cutoff) : std::nullopt,
                     .edge_occlusion_residual_ratio =
                         edge_recovery_used ? std::optional<double>(edge_occlusion->residual_ratio) : std::nullopt,
                     .row = single_roi ? std::optional<int> {} : std::optional<int>(cell.row),

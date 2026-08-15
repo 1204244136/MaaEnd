@@ -450,9 +450,8 @@ std::optional<double> EstimateRewardsScaleFromCards(const cv::Mat& image, const 
         return std::abs(median_size - profile.cell_size * scale);
     };
     const double relative_error = distance_for(*selected) / (profile.cell_size * *selected);
-    const auto alternate = selected == kSupportedControllerGridScales.begin()
-                               ? std::next(selected)
-                               : kSupportedControllerGridScales.begin();
+    const auto alternate =
+        selected == kSupportedControllerGridScales.begin() ? std::next(selected) : kSupportedControllerGridScales.begin();
     if (std::abs(distance_for(*selected) - distance_for(*alternate)) <= kEpsilon) {
         return std::nullopt;
     }
@@ -1054,8 +1053,7 @@ TransferAxisFit FitTransferAxis(
             // 源图 pitch 搜索的目标就是修正归一化坐标量化，旧坐标残差只用于同分排序，不能反向锁死旧轴。
             const double residual_weight = refine_pitch ? 0.0 : kTransferAxisResidualPenalty;
             const double score = evidence - residual_weight * residual;
-            const auto candidate =
-                std::tuple { score, -residual, -std::abs(pitch - fitted_pitch), -std::abs(phase - phase_center) };
+            const auto candidate = std::tuple { score, -residual, -std::abs(pitch - fitted_pitch), -std::abs(phase - phase_center) };
             if (candidate > best) {
                 best = candidate, best_phase = phase, best_pitch = pitch, best_score = score, best_residual = residual;
             }
@@ -1632,8 +1630,7 @@ double AxisBoundaryScore(const std::vector<float>& boundary, const std::vector<i
         if (local < 0 || end >= static_cast<int>(normalized.size())) {
             continue;
         }
-        pairs.push_back(std::sqrt(
-            std::max(SampleSignal(normalized, local), 0.0) * std::max(SampleSignal(normalized, end), 0.0)));
+        pairs.push_back(std::sqrt(std::max(SampleSignal(normalized, local), 0.0) * std::max(SampleSignal(normalized, end), 0.0)));
     }
     return pairs.empty() ? 0.0 : std::accumulate(pairs.begin(), pairs.end(), 0.0) / pairs.size();
 }
@@ -1645,12 +1642,8 @@ struct SourceAxisRefinement
     double pitch = 0.0;
 };
 
-std::optional<SourceAxisRefinement> RefineSourceAxis(
-    const GridLayout& layout,
-    const std::vector<float>& boundary,
-    int offset,
-    bool x_axis,
-    double scale)
+std::optional<SourceAxisRefinement>
+    RefineSourceAxis(const GridLayout& layout, const std::vector<float>& boundary, int offset, bool x_axis, double scale)
 {
     const std::vector<int> starts = UniqueCellStarts(layout, x_axis);
     if (starts.size() < 2 || boundary.empty()) {
