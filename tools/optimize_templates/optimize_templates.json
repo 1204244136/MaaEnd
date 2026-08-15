@@ -1705,5 +1705,7 @@
     "resource/image/SceneManager/RegionalOverview/CollapseButton": "dabd7cc5f28029f501f67f6a0df2eb266689fdea7710c317682e69d5852f7305",
     "resource/image/SceneManager/RegionalOverview/ExpandButton": "f10b3e9c6f18a635a4f4a2130a03e9185af3dbc73486b0da1fe1473ab6eb7488",
     "resource/image/SceneManager/RegionalOverview/TrialOfSwordmancyWuling": "5b26b9157cb3592cf11a96f6e4c1365a243c14ce6c358af1f9b4832251243419",
-    "resource/image/SceneManager/RegionalOverview/TrialOfSwordmancyInactive": "dfca462a6495ef6ff3fe4d2704ae2eb3c7ff36ecf1ee30383ddcf71a50022d6b"
+    "resource/image/SceneManager/RegionalOverview/TrialOfSwordmancyInactive": "dfca462a6495ef6ff3fe4d2704ae2eb3c7ff36ecf1ee30383ddcf71a50022d6b",
+    "resource/image/SceneManager/RegionalOverview/ViewPositionButtonHover": "9844c4031cd4c4134e8d2e0b84d2564890ea887e19aedd0724d9d46d00fdeb56",
+    "resource/image/SceneManager/RegionalOverview/ViewPositionButton": "6d3c6b4f00c3d3102a0b0ecc4a4e0e57f62068daccf51ff400712714673e939c"
 }
