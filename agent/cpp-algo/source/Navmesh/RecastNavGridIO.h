@@ -16,8 +16,8 @@ inline constexpr char kGridSectionTag[5] = "BGRD";
 // 补出来的格没有实体 span 时挂一条 ghost 或 fill。
 struct GridSpanRec
 {
-    int64_t cell = 0; // 瓦内格号 y * nx + x
-    uint32_t rid = 0; // 全区类号
+    int64_t cell = 0;  // 瓦内格号 y * nx + x
+    uint32_t rid = 0;  // 全区类号
     float h = 0.0F;
     uint16_t clr = 0;  // 净空的平方格距,还原用 GridClearance
     uint8_t flags = 0; // kGridFlag*
@@ -91,11 +91,17 @@ class GridPack
 {
 public:
     bool parse(const uint8_t* data, size_t len, std::string& err);
+
     bool valid() const { return base_ != nullptr; }
+
     double cellSize() const { return cell_size_; }
+
     double tilePx() const { return tile_px_; }
+
     double apronPx() const { return apron_px_; }
+
     const std::vector<GridZoneDir>& zones() const { return zones_; }
+
     const GridZoneDir* findZone(const std::string& name) const;
     // 解一块瓦:按需 inflate 再解码,不缓存。空瓦返回空 GridTile。
     bool decodeTile(const GridTileRef& t, GridTile& out) const;
@@ -111,11 +117,6 @@ private:
 };
 
 // 自有矩形与全局格矩形 [gx0,gx1]×[gy0,gy1] 相交的瓦。
-std::vector<const GridTileRef*> GridTilesInRect(
-    const GridZoneDir& zone,
-    int64_t gx0,
-    int64_t gy0,
-    int64_t gx1,
-    int64_t gy1);
+std::vector<const GridTileRef*> GridTilesInRect(const GridZoneDir& zone, int64_t gx0, int64_t gy0, int64_t gx1, int64_t gy1);
 
 }

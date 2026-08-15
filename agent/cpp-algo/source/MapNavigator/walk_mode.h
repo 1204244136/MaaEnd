@@ -27,6 +27,7 @@ public:
 
     // Idempotent; a no-op on backends with no binding — the belief only moves with a real press.
     void Request(bool walk);
+
     bool engaged() const { return Engaged(); }
 
 private:

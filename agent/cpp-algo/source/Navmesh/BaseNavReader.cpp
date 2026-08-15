@@ -207,8 +207,11 @@ struct GeoChunkTable
     uint32_t total = 0;
 
     uint32_t count() const { return chunk == 0 ? 0 : (total + chunk - 1) / chunk; }
+
     uint32_t first(uint32_t index) const { return index * chunk; }
+
     uint32_t span(uint32_t index) const { return std::min(chunk, total - first(index)); }
+
     uint32_t aux(uint32_t index) const { return PeekU32(directory + index * kGeoChunkEntrySize + 12); }
 
     void entry(uint32_t index, uint64_t& offset, uint32_t& size) const
@@ -257,8 +260,7 @@ bool ParseGeometrySection(const uint8_t* data, uint64_t size, GeometrySection* o
     GeoChunkTable* const tables[3] = { &out->vertices, &out->triangles, &out->links };
     for (GeoChunkTable* table : tables) {
         const uint64_t at = ReadU64(cursor);
-        if (table->chunk == 0
-            || !OffsetRangeValid(at, static_cast<uint64_t>(table->count()) * kGeoChunkEntrySize, size)) {
+        if (table->chunk == 0 || !OffsetRangeValid(at, static_cast<uint64_t>(table->count()) * kGeoChunkEntrySize, size)) {
             return false;
         }
         table->directory = data + at;
@@ -286,8 +288,7 @@ bool ParseGeometrySection(const uint8_t* data, uint64_t size, GeometrySection* o
 bool DecodeVertexChunk(const uint8_t* data, size_t size, uint32_t count, std::vector<uint8_t>* out)
 {
     std::vector<std::vector<uint8_t>> stream;
-    if (!SplitChunkStreams(data, size, 1, &stream)
-        || stream[0].size() != static_cast<size_t>(count) * kVertexSize) {
+    if (!SplitChunkStreams(data, size, 1, &stream) || stream[0].size() != static_cast<size_t>(count) * kVertexSize) {
         return false;
     }
     const size_t at = out->size();
@@ -304,8 +305,7 @@ bool DecodeVertexChunk(const uint8_t* data, size_t size, uint32_t count, std::ve
 bool DecodeTriangleChunk(const uint8_t* data, size_t size, uint32_t count, uint32_t first, std::vector<uint8_t>* out)
 {
     std::vector<std::vector<uint8_t>> stream;
-    if (!SplitChunkStreams(data, size, 7, &stream)
-        || stream[3].size() != (static_cast<size_t>(count) * 3 + 7) / 8) {
+    if (!SplitChunkStreams(data, size, 7, &stream) || stream[3].size() != (static_cast<size_t>(count) * 3 + 7) / 8) {
         return false;
     }
     const uint8_t* index_cursor[3] = { stream[0].data(), stream[1].data(), stream[2].data() };
@@ -610,8 +610,7 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
         section_count = ReadU32(header_cursor);
         (void)ReadU32(header_cursor); // reserved
         if (section_count != 0
-            && !OffsetRangeValid(
-                section_dir_offset, static_cast<uint64_t>(section_count) * kSectionEntrySize, file_size)) {
+            && !OffsetRangeValid(section_dir_offset, static_cast<uint64_t>(section_count) * kSectionEntrySize, file_size)) {
             return Fail(BaseNavLoadStatus::InvalidOffset, "nav section directory is outside file bounds");
         }
     }
@@ -651,8 +650,7 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
         if (found == nullptr || !ParseGeometrySection(found->bytes.data(), found->bytes.size(), &geometry)) {
             return Fail(BaseNavLoadStatus::InvalidOffset, "nav geometry section is missing or malformed");
         }
-        if (geometry.vertices.total != vertex_count || geometry.triangles.total != triangle_count
-            || geometry.links.total != link_count) {
+        if (geometry.vertices.total != vertex_count || geometry.triangles.total != triangle_count || geometry.links.total != link_count) {
             return Fail(BaseNavLoadStatus::InvalidSize, "nav geometry section disagrees with the header counts");
         }
         zone_table = geometry.zone_table;
@@ -738,7 +736,11 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
     uint32_t link_table_count = link_count;
     if (sectioned) {
         if (!DecodeChunkRange(
-                geometry.triangles, geometry.base, selected_first_triangle, selected_triangle_end, &triangle_base,
+                geometry.triangles,
+                geometry.base,
+                selected_first_triangle,
+                selected_triangle_end,
+                &triangle_base,
                 [&](const uint8_t* at, size_t size, uint32_t span, uint32_t first) {
                     return DecodeTriangleChunk(at, size, span, first, &triangle_storage);
                 })) {
@@ -764,7 +766,11 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
             want_high = low <= high ? high + 1 : 0;
         }
         if (!DecodeChunkRange(
-                geometry.vertices, geometry.base, want_low, want_high, &vertex_base,
+                geometry.vertices,
+                geometry.base,
+                want_low,
+                want_high,
+                &vertex_base,
                 [&](const uint8_t* at, size_t size, uint32_t span, uint32_t) {
                     return DecodeVertexChunk(at, size, span, &vertex_storage);
                 })) {
@@ -775,8 +781,7 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
             float u[3] = {};
             float v[3] = {};
             for (int i = 0; i < 3; ++i) {
-                const uint8_t* vertex =
-                    vertex_storage.data() + static_cast<size_t>(PeekU32(record + i * 4) - vertex_base) * kVertexSize;
+                const uint8_t* vertex = vertex_storage.data() + static_cast<size_t>(PeekU32(record + i * 4) - vertex_base) * kVertexSize;
                 std::memcpy(&u[i], vertex, sizeof(float));
                 std::memcpy(&v[i], vertex + 4, sizeof(float));
             }
@@ -789,8 +794,7 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
         // 连接表可以一条都没有,那时一块都不解,下游按 0 条连接走。
         const uint32_t link_chunks = geometry.links.count();
         const uint32_t low_chunk = zone_scoped ? GeoLinkChunkFor(geometry.links, selected_first_triangle) : 0;
-        const uint32_t high_chunk =
-            zone_scoped ? GeoLinkChunkFor(geometry.links, selected_triangle_end) : link_chunks;
+        const uint32_t high_chunk = zone_scoped ? GeoLinkChunkFor(geometry.links, selected_triangle_end) : link_chunks;
         for (uint32_t i = low_chunk; i < link_chunks && i <= high_chunk; ++i) {
             uint32_t size = 0;
             const uint8_t* at = geometry.links.bytes(geometry.base, i, size);
@@ -823,8 +827,7 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
     triangles.reserve(selected_triangle_count);
     uint32_t first_vertex = zone_scoped ? vertex_count : 0;
     uint32_t last_vertex = 0;
-    const uint8_t* triangle_cursor =
-        triangle_bytes + static_cast<uint64_t>(selected_first_triangle - triangle_base) * kTriangleSize;
+    const uint8_t* triangle_cursor = triangle_bytes + static_cast<uint64_t>(selected_first_triangle - triangle_base) * kTriangleSize;
     for (uint32_t index = 0; index < selected_triangle_count; ++index) {
         BaseNavTriangle triangle = ReadTriangleRecord(triangle_cursor);
         for (uint32_t value : triangle.vertices) {
@@ -889,10 +892,8 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
     }
 
     std::vector<BaseNavLink> links;
-    const size_t first_link =
-        zone_scoped ? LowerBoundLinkSource(link_bytes, link_table_count, selected_first_triangle) : 0;
-    const size_t last_link =
-        zone_scoped ? LowerBoundLinkSource(link_bytes, link_table_count, selected_triangle_end) : link_table_count;
+    const size_t first_link = zone_scoped ? LowerBoundLinkSource(link_bytes, link_table_count, selected_first_triangle) : 0;
+    const size_t last_link = zone_scoped ? LowerBoundLinkSource(link_bytes, link_table_count, selected_triangle_end) : link_table_count;
     links.reserve(last_link - first_link);
     const uint8_t* link_cursor = link_bytes + first_link * kLinkSize;
     for (size_t index = first_link; index < last_link; ++index) {
@@ -914,8 +915,8 @@ BaseNavLoadResult LoadBaseNavPack(const std::filesystem::path& path, std::string
     }
 
     BaseNavLoadResult result;
-    result.pack = detail::MakeBaseNavPack(
-        path, std::move(zones), std::move(vertices), std::move(triangles), std::move(links), std::move(sections));
+    result.pack =
+        detail::MakeBaseNavPack(path, std::move(zones), std::move(vertices), std::move(triangles), std::move(links), std::move(sections));
     return result;
 }
 

@@ -63,14 +63,7 @@ struct GridWindow
     std::vector<int64_t> next; // 逐记录: 同格的下一条
 };
 
-bool loadGridWindow(
-    const GridPack& gp,
-    const GridZoneDir& gz,
-    int64_t wgx0,
-    int64_t wgy0,
-    int64_t nx,
-    int64_t ny,
-    GridWindow& out)
+bool loadGridWindow(const GridPack& gp, const GridZoneDir& gz, int64_t wgx0, int64_t wgy0, int64_t nx, int64_t ny, GridWindow& out)
 {
     GridTile tile;
     for (const GridTileRef* t : GridTilesInRect(gz, wgx0, wgy0, wgx0 + nx - 1, wgy0 + ny - 1)) {
@@ -242,8 +235,8 @@ std::optional<WindowInfo> buildWindow(
     }
     uint32_t region = gw.rec[static_cast<size_t>(start_rec)].rid;
     if (goal_deck.has_value()) {
-        const int64_t deck_rec = pickDeckRec(
-            gw, nx, ny, static_cast<int64_t>((g.x - x0) / kCS), static_cast<int64_t>((g.y - y0) / kCS), *goal_deck);
+        const int64_t deck_rec =
+            pickDeckRec(gw, nx, ny, static_cast<int64_t>((g.x - x0) / kCS), static_cast<int64_t>((g.y - y0) / kCS), *goal_deck);
         if (deck_rec < 0) {
             err = "终点附近没有声明的面 (deck=" + std::to_string(*goal_deck) + ")";
             return std::nullopt;
@@ -410,12 +403,8 @@ std::optional<WindowInfo> buildWindow(
 }
 
 // goal_deck: 终点所在面的高度。不声明时终点集是该格全部 span,先够到哪张停哪张
-std::optional<std::vector<WorldPoint>> routeWindow(
-    const WindowInfo& info,
-    const WorldPoint& s,
-    const WorldPoint& g,
-    RouteDiag& dg,
-    std::optional<double> goal_deck)
+std::optional<std::vector<WorldPoint>>
+    routeWindow(const WindowInfo& info, const WorldPoint& s, const WorldPoint& g, RouteDiag& dg, std::optional<double> goal_deck)
 {
     const int64_t nx = info.nx;
     const int64_t ny = info.ny;
@@ -650,8 +639,8 @@ std::optional<std::vector<WorldPoint>> routeWindow(
                 list += (list.empty() ? "" : ", ") + std::string(buf);
             }
             std::snprintf(buf, sizeof(buf), "%.2f", *goal_deck);
-            dg.err = "目标面不可达 (声明 " + std::string(buf) + ", 终点格里的面 "
-                     + (list.empty() ? std::string("无") : "[" + list + "]") + ")";
+            dg.err =
+                "目标面不可达 (声明 " + std::string(buf) + ", 终点格里的面 " + (list.empty() ? std::string("无") : "[" + list + "]") + ")";
             return std::nullopt;
         }
         std::tie(as_, dsa) = near(walk, sc);

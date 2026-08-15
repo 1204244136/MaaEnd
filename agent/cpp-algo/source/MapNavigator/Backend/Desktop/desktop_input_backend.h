@@ -34,6 +34,7 @@ public:
     SteeringTransportProfile steering_transport_profile() const override;
 
     bool supports_sprint() const override { return true; }
+
     bool supports_walk_toggle() const override { return true; }
 
     void SetMovementStateSync(bool forward, bool left, bool backward, bool right, int delay_millis) override;

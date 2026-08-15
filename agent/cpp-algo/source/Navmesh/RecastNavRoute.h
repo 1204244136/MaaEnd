@@ -73,7 +73,7 @@ private:
     const BaseNavPlanner& planner_;
     std::mutex mutex_;
     std::unordered_map<std::string, ZoneEntry> zones_;
-    GridPack grid_;         // 包里的预烘格图,没有它就没法规划
+    GridPack grid_; // 包里的预烘格图,没有它就没法规划
     std::string grid_error_;
 };
 

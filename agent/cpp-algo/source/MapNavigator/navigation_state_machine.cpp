@@ -1494,8 +1494,7 @@ bool NavigationStateMachine::TickNavigate()
     flow.has_last_steer_position = true;
     // At walking speed one tick's step sits under the position quantum, so a straight walk reads as motionless.
     // Widen the window rather than lower the threshold — the threshold is what rejects quantization noise.
-    const int32_t hold_reassert_ticks =
-        walk_mode_.engaged() ? kForwardHoldReassertTicks * kWalkModeSlowFactor : kForwardHoldReassertTicks;
+    const int32_t hold_reassert_ticks = walk_mode_.engaged() ? kForwardHoldReassertTicks * kWalkModeSlowFactor : kForwardHoldReassertTicks;
     if (flow.motionless_hold_ticks >= hold_reassert_ticks) {
         ++flow.futile_forward_reasserts;
         LogWarn << "Forward hold produced no motion; re-sending it." << VAR(flow.motionless_hold_ticks) << VAR(heading_error)

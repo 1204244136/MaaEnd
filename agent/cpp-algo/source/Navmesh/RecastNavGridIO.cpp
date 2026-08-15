@@ -49,8 +49,11 @@ struct Cursor
     }
 
     bool u32(uint32_t& out) { return read(out); }
+
     bool u64(uint64_t& out) { return read(out); }
+
     bool i32(int32_t& out) { return read(out); }
+
     bool f64(double& out) { return read(out); }
 };
 
@@ -167,8 +170,7 @@ bool DecodeGridTile(const uint8_t* data, size_t len, GridTile& out)
             uint64_t hq = 0;
             uint64_t rid = 0;
             uint64_t clr = 0;
-            if (!GetVarint(col[1], col_end[1], hq) || !GetVarint(col[2], col_end[2], rid)
-                || !GetVarint(col[5], col_end[5], clr)) {
+            if (!GetVarint(col[1], col_end[1], hq) || !GetVarint(col[2], col_end[2], rid) || !GetVarint(col[5], col_end[5], clr)) {
                 return false;
             }
             if (col[3] == col_end[3] || col[4] == col_end[4]) {
@@ -180,9 +182,7 @@ bool DecodeGridTile(const uint8_t* data, size_t len, GridTile& out)
             r.clr = static_cast<uint16_t>(clr);
             r.flags = *col[3]++;
             r.steps = *col[4]++;
-            r.h = (r.flags & kGridFlagFill) != 0
-                ? 0.0F
-                : static_cast<float>(static_cast<double>(hmin) + static_cast<double>(hq) / 64.0);
+            r.h = (r.flags & kGridFlagFill) != 0 ? 0.0F : static_cast<float>(static_cast<double>(hmin) + static_cast<double>(hq) / 64.0);
             out.rec.push_back(r);
         }
     }
@@ -240,8 +240,7 @@ bool DecodeGridTileV3(const uint8_t* data, size_t len, int32_t nx, GridTile& out
     std::vector<uint8_t> stream[kGridStreamCount];
     for (std::vector<uint8_t>& s : stream) {
         uint64_t packed = 0;
-        if (!GetVarint(p, end, packed) || static_cast<uint64_t>(end - p) < packed
-            || !Inflate(p, static_cast<size_t>(packed), s)) {
+        if (!GetVarint(p, end, packed) || static_cast<uint64_t>(end - p) < packed || !Inflate(p, static_cast<size_t>(packed), s)) {
             return false;
         }
         p += packed;
@@ -251,8 +250,7 @@ bool DecodeGridTileV3(const uint8_t* data, size_t len, int32_t nx, GridTile& out
     }
     // 每条记录给每条残差流至少一个字节,每个格给格号流与层数流各至少一个,类号同理。
     // 流已经解开了,流长就是这几个计数的现成上界:先卡住,再按计数开数组。
-    if (n > stream[3].size() || ncell > stream[0].size() || ncell > stream[1].size()
-        || regions > stream[2].size()) {
+    if (n > stream[3].size() || ncell > stream[0].size() || ncell > stream[1].size() || regions > stream[2].size()) {
         return false;
     }
 
@@ -268,8 +266,7 @@ bool DecodeGridTileV3(const uint8_t* data, size_t len, int32_t nx, GridTile& out
     size_t running_base = 0;
     for (size_t i = 0; i < static_cast<size_t>(ncell); ++i) {
         uint64_t step = 0;
-        if (!GetVarint(pc, pc_end, step) || !GetVarint(pk, pk_end, depth[i]) || depth[i] == 0
-            || depth[i] > kmax) {
+        if (!GetVarint(pc, pc_end, step) || !GetVarint(pk, pk_end, depth[i]) || depth[i] == 0 || depth[i] > kmax) {
             return false;
         }
         running_cell += static_cast<int64_t>(step);
@@ -409,9 +406,8 @@ bool DecodeGridTileV3(const uint8_t* data, size_t len, int32_t nx, GridTile& out
     for (size_t i = 0; i < static_cast<size_t>(n); ++i) {
         GridSpanRec& r = out.rec[i];
         r.rid = dictionary[static_cast<size_t>(region_index[i])];
-        r.h = (r.flags & kGridFlagFill) != 0
-            ? 0.0F
-            : static_cast<float>(static_cast<double>(hmin) + static_cast<double>(height_q[i]) / 64.0);
+        r.h =
+            (r.flags & kGridFlagFill) != 0 ? 0.0F : static_cast<float>(static_cast<double>(hmin) + static_cast<double>(height_q[i]) / 64.0);
     }
     return true;
 }
@@ -433,8 +429,8 @@ bool GridPack::parse(const uint8_t* data, size_t len, std::string& err)
     uint32_t version = 0;
     uint32_t zone_count = 0;
     uint32_t reserved = 0;
-    if (!cur.u32(version) || !cur.f64(cell_size_) || !cur.f64(tile_px_) || !cur.f64(apron_px_)
-        || !cur.u32(zone_count) || !cur.u32(reserved)) {
+    if (!cur.u32(version) || !cur.f64(cell_size_) || !cur.f64(tile_px_) || !cur.f64(apron_px_) || !cur.u32(zone_count)
+        || !cur.u32(reserved)) {
         err = "GRID header is truncated";
         return false;
     }
@@ -467,8 +463,7 @@ bool GridPack::parse(const uint8_t* data, size_t len, std::string& err)
         }
         const size_t padded = (static_cast<size_t>(name_len) + 3) / 4 * 4;
         const uint8_t* name_bytes = nullptr;
-        if (!cur.take(padded, name_bytes) || !cur.f64(z.x0) || !cur.f64(z.y0)
-            || !cur.u32(z.global_regions) || !cur.u32(tile_count)) {
+        if (!cur.take(padded, name_bytes) || !cur.f64(z.x0) || !cur.f64(z.y0) || !cur.u32(z.global_regions) || !cur.u32(tile_count)) {
             err = "GRID zone directory is truncated";
             return false;
         }
@@ -487,8 +482,7 @@ bool GridPack::parse(const uint8_t* data, size_t len, std::string& err)
             cur.u64(r.offset);
             cur.u32(r.len);
             cur.u32(r.records);
-            if (!cur.ok || r.nx <= 0 || r.ny <= 0 || r.nx > max_side || r.ny > max_side
-                || r.offset > len || r.len > len - r.offset) {
+            if (!cur.ok || r.nx <= 0 || r.ny <= 0 || r.nx > max_side || r.ny > max_side || r.offset > len || r.len > len - r.offset) {
                 err = "GRID tile of zone '" + z.name + "' points outside the section";
                 return false;
             }
@@ -529,12 +523,7 @@ bool GridPack::decodeTile(const GridTileRef& t, GridTile& out) const
     return DecodeGridTile(raw.data(), raw.size(), out) && out.rec.size() == t.records;
 }
 
-std::vector<const GridTileRef*> GridTilesInRect(
-    const GridZoneDir& zone,
-    int64_t gx0,
-    int64_t gy0,
-    int64_t gx1,
-    int64_t gy1)
+std::vector<const GridTileRef*> GridTilesInRect(const GridZoneDir& zone, int64_t gx0, int64_t gy0, int64_t gx1, int64_t gy1)
 {
     std::vector<const GridTileRef*> hit;
     for (const GridTileRef& t : zone.tiles) {
