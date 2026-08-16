@@ -140,8 +140,7 @@ json::object BuildZones(const navmesh::BaseNavPack& pack)
                             static_cast<double>(zone.transform[1]),
                             static_cast<double>(zone.transform[2]),
                             static_cast<double>(zone.transform[3]) } },
-            { "floor_y",
-              zone.floor_y > navmesh::kBaseNavFloorYValidMin ? json::value(static_cast<double>(zone.floor_y)) : json::value() },
+            { "floor_y", zone.floor_y > navmesh::kBaseNavFloorYValidMin ? json::value(static_cast<double>(zone.floor_y)) : json::value() },
             { "triangle_count", zone.triangle_count },
         };
         zones.emplace_back(std::move(item));
@@ -272,6 +271,7 @@ json::object BuildDeckProbe(const QueryContext& context, const QueryParam& param
         double distance = 0.0;
         uint32_t triangle = 0;
     };
+
     std::vector<Hit> found;
     for (const uint32_t triangle : planner.candidateTriangles(geom, point, navmesh::recast::kCS)) {
         const auto vertices = planner.trianglePoints(triangle);
@@ -302,13 +302,13 @@ json::object BuildDeckProbe(const QueryContext& context, const QueryParam& param
 
     json::array out;
     for (const Hit& deck : decks) {
-        out.emplace_back(json::object { { "height", deck.height },
-                                        // 寻路认这张面的高度带, 前端拿它高亮同层三角形
-                                        { "band", json::array { deck.height - navmesh::recast::kDeckBand,
-                                                                deck.height + navmesh::recast::kDeckBand } },
-                                        { "on_surface", deck.distance == 0.0 },
-                                        // 烘焙出来的墙顶/檐口薄片, 不是真地面
-                                        { "thin", planner.isSmallIslandTriangle(deck.triangle) } });
+        out.emplace_back(
+            json::object { { "height", deck.height },
+                           // 寻路认这张面的高度带, 前端拿它高亮同层三角形
+                           { "band", json::array { deck.height - navmesh::recast::kDeckBand, deck.height + navmesh::recast::kDeckBand } },
+                           { "on_surface", deck.distance == 0.0 },
+                           // 烘焙出来的墙顶/檐口薄片, 不是真地面
+                           { "thin", planner.isSmallIslandTriangle(deck.triangle) } });
     }
     return json::object { { "ok", true }, { "decks", std::move(out) } };
 }
@@ -337,9 +337,21 @@ json::object BuildRoute(QueryContext& context, const QueryParam& param)
             { "off_mesh",
               json::object {
                   { "start",
-                    ProbeOffMesh(*context.planner, geom, start, param.snap_radius, floor_y, json::value(mapnavigator::kStartRecoveryMaxBlindWalk)) },
+                    ProbeOffMesh(
+                        *context.planner,
+                        geom,
+                        start,
+                        param.snap_radius,
+                        floor_y,
+                        json::value(mapnavigator::kStartRecoveryMaxBlindWalk)) },
                   { "goal",
-                    ProbeOffMesh(*context.planner, geom, goal, param.snap_radius, floor_y, json::value(mapnavigator::kBlindTargetMaxExtension)) },
+                    ProbeOffMesh(
+                        *context.planner,
+                        geom,
+                        goal,
+                        param.snap_radius,
+                        floor_y,
+                        json::value(mapnavigator::kBlindTargetMaxExtension)) },
               } },
         };
     }
