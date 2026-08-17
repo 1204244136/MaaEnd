@@ -424,17 +424,9 @@ bool ValidateCandidateCell(
     double threshold,
     double subpixel_threshold)
 {
-    const SlotRanking ranking = RankSlot(
-        image,
-        cell_box,
-        templates,
-        std::nullopt,
-        threshold,
-        subpixel_threshold,
-        kGridSearchRadius,
-        nullptr);
-    return ranking.best.diagnostics.score >= threshold
-        && templates[ranking.best.template_index].record.item_id == expected_item_id;
+    const SlotRanking ranking =
+        RankSlot(image, cell_box, templates, std::nullopt, threshold, subpixel_threshold, kGridSearchRadius, nullptr);
+    return ranking.best.diagnostics.score >= threshold && templates[ranking.best.template_index].record.item_id == expected_item_id;
 }
 
 std::string ActiveMaskKind(
@@ -573,8 +565,7 @@ public:
                 return Error(request.roi, request.grid_type, "invalid_image", "Input image is empty");
             }
             ValidateThresholds(request.threshold, request.subpixel_threshold);
-            const bool recheck_enabled =
-                !request.candidates.item_ids.empty() && !request.candidates.item_recheck_filters.empty();
+            const bool recheck_enabled = !request.candidates.item_ids.empty() && !request.candidates.item_recheck_filters.empty();
             if (recheck_enabled) {
                 ValidateFilters(request.candidates.item_recheck_filters, "item_recheck_filters");
             }

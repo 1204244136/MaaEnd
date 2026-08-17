@@ -198,11 +198,7 @@ struct RecheckDeduplicateFixture
 
 RecheckDeduplicateFixture MakeRecheckDeduplicateFixture()
 {
-    cv::Mat pixels(
-        kTransferSyntheticHeight,
-        kTransferSyntheticWidth,
-        CV_8UC3,
-        cv::Scalar(18, 18, 18));
+    cv::Mat pixels(kTransferSyntheticHeight, kTransferSyntheticWidth, CV_8UC3, cv::Scalar(18, 18, 18));
     for (int x = 0; x < kTransferSyntheticWidth; x += kTransferSyntheticPitch) {
         pixels.colRange(x, std::min(x + 2, kTransferSyntheticWidth)).setTo(cv::Scalar(245, 245, 245));
     }
@@ -426,7 +422,16 @@ void TestItemRecheckFiltersValidateCandidates()
     StringBuffer success_detail;
     Require(
         iconrecognition::IconRecognitionRun(
-            nullptr, 0, "IconRecognitionTest", "IconRecognition", success_param, image.get(), &fixture.roi, nullptr, &out_box, success_detail.get()),
+            nullptr,
+            0,
+            "IconRecognitionTest",
+            "IconRecognition",
+            success_param,
+            image.get(),
+            &fixture.roi,
+            nullptr,
+            &out_box,
+            success_detail.get()),
         "matching item_recheck_filters must preserve the candidate");
     Require(success_detail.detail().at("matches").as_array().size() == 1, "successful reverse check must keep one match");
 
@@ -461,21 +466,15 @@ void TestItemRecheckFiltersRespectDeduplication()
 
     const auto without_deduplicate = recognizer.recognize(fixture.pixels, request);
     Require(without_deduplicate.matched, "both rechecked duplicate candidates must match without deduplication");
+    Require(without_deduplicate.matches.size() == 2, "deduplicate=false must keep both candidates with the same item_id");
     Require(
-        without_deduplicate.matches.size() == 2,
-        "deduplicate=false must keep both candidates with the same item_id");
-    Require(
-        std::ranges::all_of(
-            without_deduplicate.matches,
-            [](const auto& match) { return match.item.item_id == "item_copper_ore"; }),
+        std::ranges::all_of(without_deduplicate.matches, [](const auto& match) { return match.item.item_id == "item_copper_ore"; }),
         "deduplicate=false candidates must share the requested item_id");
 
     request.deduplicate = true;
     const auto with_deduplicate = recognizer.recognize(fixture.pixels, request);
     Require(with_deduplicate.matched, "one rechecked duplicate candidate must match with deduplication");
-    Require(
-        with_deduplicate.matches.size() == 1,
-        "deduplicate=true must keep only one candidate with the same item_id");
+    Require(with_deduplicate.matches.size() == 1, "deduplicate=true must keep only one candidate with the same item_id");
 }
 
 void TestRecognizerPreservesInternalDiagnostics()

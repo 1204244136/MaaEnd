@@ -233,12 +233,12 @@ func parseAddItemDataParam(raw string) (addItemDataParam, error) {
 
 // resolveAddItemDataCandidates builds IconRecognition params for A3.
 //
-// - Neither filters nor IDs: leave both empty so IconRecognition uses grid defaults.
-// - Only filters: pass filters through (IR defaults replaced by the non-empty list).
-// - Only IDs: pass IDs plus covering filters derived from the catalog.
-// - Both: union of expanded filters and IDs, then pass explicit item_ids with
-//   covering filters so IR intersection keeps the full union (IR would otherwise
-//   intersect and drop IDs outside the filter set, or drop filter-only IDs).
+//   - Neither filters nor IDs: leave both empty so IconRecognition uses grid defaults.
+//   - Only filters: pass filters through (IR defaults replaced by the non-empty list).
+//   - Only IDs: pass IDs plus covering filters derived from the catalog.
+//   - Both: union of expanded filters and IDs, then pass explicit item_ids with
+//     covering filters so IR intersection keeps the full union (IR would otherwise
+//     intersect and drop IDs outside the filter set, or drop filter-only IDs).
 func resolveAddItemDataCandidates(filters, itemIDs []string) (scanFilters, scanIDs []string, err error) {
 	filters, err = iconqty.NormalizeStringList(filters, "item_filters")
 	if err != nil {

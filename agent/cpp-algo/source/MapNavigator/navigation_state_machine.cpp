@@ -416,8 +416,7 @@ std::optional<DynamicAnchor>
 
     // plan_attempts - 1 waypoints ahead of the anchor turned out unreachable.
     if (anchor) {
-        LogInfo << "Bootstrap navmesh anchor selected." << VAR(anchor->first) << VAR(anchor_cost) << VAR(plan_attempts)
-                << VAR(start_index);
+        LogInfo << "Bootstrap navmesh anchor selected." << VAR(anchor->first) << VAR(anchor_cost) << VAR(plan_attempts) << VAR(start_index);
     }
     return anchor;
 }
