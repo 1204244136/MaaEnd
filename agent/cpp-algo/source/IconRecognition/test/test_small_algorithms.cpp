@@ -590,9 +590,8 @@ void TestRewardsAdbGridUsesSixColumnSharedOrigin()
     Check(grid.grids.size() == 1, "ADB wrapped rewards rows must form one shared grid");
     Check(grid.grids.front().columns == kFullColumns && grid.grids.front().rows == 2, "ADB wrapped grid shape must be 6x2");
     Check(grid.grids.front().cells.size() == 8, "ADB wrapped grid must keep six first-row and two second-row cells");
-    const auto second_row = std::ranges::find_if(
-        grid.grids.front().cells,
-        [](const auto& cell) { return cell.row == 1 && cell.column == 0; });
+    const auto second_row =
+        std::ranges::find_if(grid.grids.front().cells, [](const auto& cell) { return cell.row == 1 && cell.column == 0; });
     Check(second_row != grid.grids.front().cells.end(), "ADB wrapped row must expose its first cell");
     Check(std::abs(second_row->cell_box.x - kOriginX) <= 1, "ADB wrapped row must reuse the six-column left boundary");
 }

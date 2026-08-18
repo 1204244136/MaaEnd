@@ -72,17 +72,14 @@ void RunPromptSubtask(MaaContext* context, const AsyncPromptActionSpec& spec, co
 class AsyncPromptAction
 {
 public:
-    AsyncPromptAction(
-        const AsyncPromptActionSpec& spec,
-        MaaContext* context,
-        NavigationSession* session,
-        const NaviPosition* position);
+    AsyncPromptAction(const AsyncPromptActionSpec& spec, MaaContext* context, NavigationSession* session, const NaviPosition* position);
     ~AsyncPromptAction();
 
     AsyncPromptAction(const AsyncPromptAction&) = delete;
     AsyncPromptAction& operator=(const AsyncPromptAction&) = delete;
 
     const AsyncPromptActionSpec& spec() const { return spec_; }
+
     bool armed() const { return started_; }
 
     // Whether this run has any point of this kind at all, and whether the last positioned one is of this kind.

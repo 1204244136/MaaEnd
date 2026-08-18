@@ -1731,8 +1731,8 @@ void NavigationStateMachine::UpdateWalkMode(NaviPhase phase)
     const double nearest_sq = NearestPromptDistanceSq();
     const bool recovering = runtime_state_.recovery.active || runtime_state_.cross_tier_escape.active;
     const ActionType action = session_->HasCurrentWaypoint() ? session_->CurrentWaypoint().action : ActionType::HEADING;
-    const bool plain_approach = action == ActionType::COLLECT || action == ActionType::INTERACT || action == ActionType::RUN
-                               || action == ActionType::NAVMESH;
+    const bool plain_approach =
+        action == ActionType::COLLECT || action == ActionType::INTERACT || action == ActionType::RUN || action == ActionType::NAVMESH;
     if (phase != NaviPhase::Navigate || nearest_sq < 0.0 || recovering || !plain_approach
         || !runtime_state_.route.startup_motion_confirmed) {
         walk_mode_.Request(false);

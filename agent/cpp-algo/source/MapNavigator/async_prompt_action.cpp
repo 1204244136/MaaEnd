@@ -291,8 +291,7 @@ void AsyncPromptAction::BuildScanner(const std::string& scan_node)
         profile = DefaultScanProfile(context_, spec_, fallback_roi_, controller_type_);
     }
     else if (!TryLoadPromptScanProfile(context_, scan_node, controller_type_, &profile)) {
-        LogError << "Points naming this scan node get no pre-filter; they stop on arrival instead." << VAR(spec_.tag)
-                 << VAR(scan_node);
+        LogError << "Points naming this scan node get no pre-filter; they stop on arrival instead." << VAR(spec_.tag) << VAR(scan_node);
         return;
     }
     if (profile.templ.empty()) {
@@ -301,9 +300,9 @@ void AsyncPromptAction::BuildScanner(const std::string& scan_node)
     }
 
     scanner_ = std::make_unique<RoiTemplateScanner>(spec_.tag, profile.base_roi, profile.templ, profile.mask, profile.threshold);
-    LogInfo << "Async prompt scanner started." << VAR(spec_.tag) << VAR(scan_node) << VAR(profile.base_roi.x)
-            << VAR(profile.base_roi.y) << VAR(profile.base_roi.width) << VAR(profile.base_roi.height) << VAR(profile.templ.cols)
-            << VAR(profile.templ.rows) << VAR(profile.threshold);
+    LogInfo << "Async prompt scanner started." << VAR(spec_.tag) << VAR(scan_node) << VAR(profile.base_roi.x) << VAR(profile.base_roi.y)
+            << VAR(profile.base_roi.width) << VAR(profile.base_roi.height) << VAR(profile.templ.cols) << VAR(profile.templ.rows)
+            << VAR(profile.threshold);
 }
 
 bool AsyncPromptAction::ConsumeDetection()

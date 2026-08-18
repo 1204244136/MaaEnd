@@ -323,12 +323,14 @@ GridDetection DetectRewardsGrid(const cv::Mat& image, const cv::Rect& roi)
         }
         rows.back().push_back(candidate);
     }
+
     struct DetectedRow
     {
         int top = 0;
         double pitch_x = 0.0;
         std::vector<int> starts;
     };
+
     std::vector<DetectedRow> detected_rows;
     detected_rows.reserve(rows.size());
     for (auto& row : rows) {
@@ -382,6 +384,7 @@ GridDetection DetectRewardsGrid(const cv::Mat& image, const cv::Rect& roi)
         int columns = 0;
         double center_error = std::numeric_limits<double>::infinity();
     };
+
     std::optional<LayoutCandidate> selected_layout;
     const double center_x = image.cols / 2.0;
     const double center_y = image.rows / 2.0;
@@ -405,11 +408,7 @@ GridDetection DetectRewardsGrid(const cv::Mat& image, const cv::Rect& roi)
 
     for (std::size_t row_index = 0; row_index < detected_rows.size(); ++row_index) {
         const auto& row = detected_rows[row_index];
-        if (const auto error = centered(
-                row.starts.front(),
-                row.top,
-                row.starts.back() + profile.cell_size,
-                row.top + profile.cell_size)) {
+        if (const auto error = centered(row.starts.front(), row.top, row.starts.back() + profile.cell_size, row.top + profile.cell_size)) {
             consider({
                 .first_row = row_index,
                 .row_count = 1,
@@ -518,9 +517,10 @@ GridDetection DetectRewardsGrid(const cv::Mat& image, const cv::Rect& roi)
     for (std::size_t row_offset = 0; row_offset < selected_layout->row_count; ++row_offset) {
         const auto& row = detected_rows[selected_layout->first_row + row_offset];
         for (std::size_t index = 0; index < row.starts.size(); ++index) {
-            const int column = selected_layout->row_count == 1 ? static_cast<int>(index)
-                                                                : cvRound((row.starts[index] - origin_x) / first_row.pitch_x);
-            layout.cells.push_back({ 0, static_cast<int>(row_offset), column, cv::Rect(row.starts[index], row.top, profile.cell_size, profile.cell_size) });
+            const int column =
+                selected_layout->row_count == 1 ? static_cast<int>(index) : cvRound((row.starts[index] - origin_x) / first_row.pitch_x);
+            layout.cells.push_back(
+                { 0, static_cast<int>(row_offset), column, cv::Rect(row.starts[index], row.top, profile.cell_size, profile.cell_size) });
         }
     }
     layout.columns = selected_layout->columns;
@@ -580,6 +580,7 @@ std::optional<double> EstimateRewardsScaleFromCards(const cv::Mat& image, const 
         std::vector<double> relative_errors;
         std::vector<cv::Rect> cards;
     };
+
     std::vector<ScaleEvidence> evidence;
     evidence.reserve(kSupportedControllerGridScales.size());
     for (double scale : kSupportedControllerGridScales) {
@@ -624,11 +625,7 @@ std::optional<double> EstimateRewardsScaleFromCards(const cv::Mat& image, const 
         }
 
         const int center_x = roi.x + x + width / 2;
-        const cv::Rect card(
-            center_x - expected_size / 2,
-            roi.y + y,
-            expected_size,
-            expected_size);
+        const cv::Rect card(center_x - expected_size / 2, roi.y + y, expected_size, expected_size);
         if ((card & roi) != card || !ClassifyRarity(image, card, selected->scale).rarity) {
             continue;
         }
@@ -655,8 +652,8 @@ std::optional<double> EstimateRewardsScaleFromCards(const cv::Mat& image, const 
     const auto center_error = [&](const ScaleEvidence& candidate) {
         const auto bounds = bounds_for(candidate);
         return bounds ? std::max(
-                            std::abs(bounds->x + bounds->width / 2.0 - image.cols / 2.0),
-                            std::abs(bounds->y + bounds->height / 2.0 - image.rows / 2.0))
+                   std::abs(bounds->x + bounds->width / 2.0 - image.cols / 2.0),
+                   std::abs(bounds->y + bounds->height / 2.0 - image.rows / 2.0))
                       : std::numeric_limits<double>::infinity();
     };
     const auto centered = [&](const ScaleEvidence& candidate) {
@@ -673,15 +670,12 @@ std::optional<double> EstimateRewardsScaleFromCards(const cv::Mat& image, const 
         if (std::abs(center_error(left) - center_error(right)) > kEpsilon) {
             return center_error(left) > center_error(right);
         }
-        const double left_error = left.relative_errors.empty() ? std::numeric_limits<double>::infinity()
-                                                                : Median(left.relative_errors);
-        const double right_error = right.relative_errors.empty() ? std::numeric_limits<double>::infinity()
-                                                                  : Median(right.relative_errors);
+        const double left_error = left.relative_errors.empty() ? std::numeric_limits<double>::infinity() : Median(left.relative_errors);
+        const double right_error = right.relative_errors.empty() ? std::numeric_limits<double>::infinity() : Median(right.relative_errors);
         return left_error > right_error;
     });
-    return selected != evidence.end() && !selected->relative_errors.empty() && centered(*selected)
-               ? std::optional<double>(selected->scale)
-               : std::nullopt;
+    return selected != evidence.end() && !selected->relative_errors.empty() && centered(*selected) ? std::optional<double>(selected->scale)
+                                                                                                   : std::nullopt;
 }
 
 struct StructureProjection
@@ -2039,8 +2033,7 @@ GridDetection DetectGrid(const cv::Mat& image, GridType type, const cv::Rect& ro
         throw std::invalid_argument("grid ROI is outside image");
     }
 
-    if (grid_scale_hint
-        && std::ranges::find(kSupportedControllerGridScales, *grid_scale_hint) == kSupportedControllerGridScales.end()) {
+    if (grid_scale_hint && std::ranges::find(kSupportedControllerGridScales, *grid_scale_hint) == kSupportedControllerGridScales.end()) {
         throw std::invalid_argument("unsupported IconRecognition controller profile hint");
     }
     const auto estimated_scale = grid_scale_hint ? grid_scale_hint : EstimateGridScale(image, type, roi);

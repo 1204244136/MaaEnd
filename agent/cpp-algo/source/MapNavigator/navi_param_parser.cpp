@@ -255,10 +255,7 @@ struct NaviInteractInput
         MEO_OPT MEO_KEY("interact_scan") interact_scan_,
         MEO_OPT MEO_KEY("interactScan") interactScan_)
 
-    const std::vector<std::string>& texts() const
-    {
-        return interact_text_.texts_.empty() ? interactText_.texts_ : interact_text_.texts_;
-    }
+    const std::vector<std::string>& texts() const { return interact_text_.texts_.empty() ? interactText_.texts_ : interact_text_.texts_; }
 
     const std::string& scan() const { return interact_scan_.empty() ? interactScan_ : interact_scan_; }
 };
@@ -691,8 +688,8 @@ void warn_scan_without_text(const std::vector<Waypoint>& waypoints)
     for (size_t index = 0; index < waypoints.size(); ++index) {
         const Waypoint& waypoint = waypoints[index];
         if (!waypoint.interact_scan.empty() && waypoint.interact_text.empty()) {
-            LogWarn << "Waypoint names a prompt scan node without any interact text; it stays a plain INTERACT."
-                    << VAR(index) << VAR(waypoint.interact_scan);
+            LogWarn << "Waypoint names a prompt scan node without any interact text; it stays a plain INTERACT." << VAR(index)
+                    << VAR(waypoint.interact_scan);
         }
     }
 }
@@ -712,8 +709,8 @@ void warn_unusable_interact_fields(const NaviWaypointInput& input)
     if (std::find(input.actions_.begin(), input.actions_.end(), ActionType::INTERACT) != input.actions_.end()) {
         return;
     }
-    LogWarn << "Waypoint carries interact fields without an INTERACT action; they do nothing here."
-            << VAR(input.interact_text_.size()) << VAR(input.interact_scan_);
+    LogWarn << "Waypoint carries interact fields without an INTERACT action; they do nothing here." << VAR(input.interact_text_.size())
+            << VAR(input.interact_scan_);
 }
 
 bool append_parsed_waypoint(const NaviWaypointInput& input, std::vector<Waypoint>& out_waypoints, std::string& zone_context)

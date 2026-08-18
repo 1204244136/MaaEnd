@@ -191,11 +191,7 @@ bool TryReadNodeRoi(MaaContext* context, const std::string& node_name, cv::Rect*
     return true;
 }
 
-bool TryLoadPromptScanProfile(
-    MaaContext* context,
-    const std::string& scan_node,
-    std::string_view controller_type,
-    PromptScanProfile* out)
+bool TryLoadPromptScanProfile(MaaContext* context, const std::string& scan_node, std::string_view controller_type, PromptScanProfile* out)
 {
     const auto node = ReadNodeObject(context, scan_node, "Prompt scan node");
     if (!node) {
@@ -296,8 +292,7 @@ bool TryLoadPromptScanProfile(
     out->mask = mask;
     out->threshold = threshold;
     LogInfo << "Prompt scan profile loaded from the pipeline." << VAR(scan_node) << VAR(MAA_NS::path_to_utf8_string(resolved))
-            << VAR(threshold) << VAR(green_mask) << VAR(base_roi.x) << VAR(base_roi.y) << VAR(base_roi.width)
-            << VAR(base_roi.height);
+            << VAR(threshold) << VAR(green_mask) << VAR(base_roi.x) << VAR(base_roi.y) << VAR(base_roi.width) << VAR(base_roi.height);
     return true;
 }
 
