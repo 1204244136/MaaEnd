@@ -66,29 +66,13 @@ std::string WideToUtf8(std::wstring_view src)
         return {};
     }
 
-    const int size = WideCharToMultiByte(
-        CP_UTF8,
-        0,
-        src.data(),
-        static_cast<int>(src.size()),
-        nullptr,
-        0,
-        nullptr,
-        nullptr);
+    const int size = WideCharToMultiByte(CP_UTF8, 0, src.data(), static_cast<int>(src.size()), nullptr, 0, nullptr, nullptr);
     if (size <= 0) {
         return {};
     }
 
     std::string out(static_cast<size_t>(size), '\0');
-    WideCharToMultiByte(
-        CP_UTF8,
-        0,
-        src.data(),
-        static_cast<int>(src.size()),
-        out.data(),
-        size,
-        nullptr,
-        nullptr);
+    WideCharToMultiByte(CP_UTF8, 0, src.data(), static_cast<int>(src.size()), out.data(), size, nullptr, nullptr);
     return out;
 }
 
@@ -163,8 +147,7 @@ public:
             LogWarn << "SystemMonitor process CPU sample skipped: zero wall delta.";
             return false;
         }
-        process_cpu = ClampUnitInterval(
-            static_cast<double>(delta_proc) / static_cast<double>(delta_wall) / logical_processor_count_);
+        process_cpu = ClampUnitInterval(static_cast<double>(delta_proc) / static_cast<double>(delta_wall) / logical_processor_count_);
 
         // GetSystemTimes 的 kernel 已含 idle。
         const uint64_t delta_idle = last_idle_ - last_idle;
@@ -307,8 +290,7 @@ public:
         }
 
         const auto* items = reinterpret_cast<PDH_FMT_COUNTERVALUE_ITEM_W*>(buffer_.data());
-        static const std::regex kEnginePattern(
-            R"(pid_(\d+)_luid_(0x[0-9A-Fa-f]+)_(0x[0-9A-Fa-f]+)_phys_(\d+)_eng_(\d+)_engtype_)");
+        static const std::regex kEnginePattern(R"(pid_(\d+)_luid_(0x[0-9A-Fa-f]+)_(0x[0-9A-Fa-f]+)_phys_(\d+)_eng_(\d+)_engtype_)");
 
         // 进程 GPU：当前 PID 在该 adapter 上各 engine 取 max。
         // 系统 GPU：同一 engine 上所有进程求和，再对 engine 取 max。
@@ -410,19 +392,11 @@ void RunMonitorLoop()
         const auto system_total_mb = memory.system_total_mb;
 
         if (cpu_ok) {
-            LogInfo << "SystemMonitor"
-                    << VAR(process_private_mb)
-                    << VAR(process_working_set_mb)
-                    << VAR(system_used_mb)
-                    << VAR(system_total_mb)
-                    << VAR(process_cpu)
-                    << VAR(system_cpu);
+            LogInfo << "SystemMonitor" << VAR(process_private_mb) << VAR(process_working_set_mb) << VAR(system_used_mb)
+                    << VAR(system_total_mb) << VAR(process_cpu) << VAR(system_cpu);
         }
         else {
-            LogInfo << "SystemMonitor"
-                    << VAR(process_private_mb)
-                    << VAR(process_working_set_mb)
-                    << VAR(system_used_mb)
+            LogInfo << "SystemMonitor" << VAR(process_private_mb) << VAR(process_working_set_mb) << VAR(system_used_mb)
                     << VAR(system_total_mb);
         }
 
