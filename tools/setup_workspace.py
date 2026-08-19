@@ -24,6 +24,29 @@ MXU_REPO: str = "MistEO/MXU"
 MAAEND_REPO: str = "MaaEnd/MaaEnd"
 
 
+def is_directory_link(path: Path) -> bool:
+    """判断路径是否为链接（含 Windows Junction，兼容 Python < 3.12）。
+
+    - Python 3.12+：优先使用新增的 Path.is_junction() 专门识别 Junction。
+    - Python 3.8–3.11：Path.is_symlink()/os.path.islink() 不把 Windows Junction
+      当作链接（实测 Python 3.11 下对 Junction 返回 False），改由
+      lstat().st_reparse_tag 识别（Windows 下 Junction 为 IO_REPARSE_TAG_MOUNT_POINT）。
+      若据此误判为普通目录并对其 rmtree，shutil 会抛
+      "Cannot call rmtree on a symbolic link"。
+    """
+    if path.is_symlink():
+        return True
+    if hasattr(path, "is_junction"):
+        try:
+            return path.is_junction()
+        except OSError:
+            return False
+    try:
+        return bool(path.lstat().st_reparse_tag)
+    except (AttributeError, OSError):
+        return False
+
+
 def create_directory_link(src: Path, dst: Path) -> bool:
     """
     在指定位置创建一个指定目录的链接
@@ -31,7 +54,7 @@ def create_directory_link(src: Path, dst: Path) -> bool:
     - Unix/macOS：symlink
     """
     if dst.exists() or dst.is_symlink():
-        if dst.is_dir() and not dst.is_symlink():
+        if dst.is_dir() and not is_directory_link(dst):
             try:
                 dst.rmdir()
             except OSError:
@@ -666,9 +689,7 @@ def install_maafw(
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir)
 
-        maafw_dest_is_link = maafw_dest.is_symlink()
-        if hasattr(maafw_dest, 'is_junction'):
-            maafw_dest_is_link = maafw_dest_is_link or maafw_dest.is_junction()
+        maafw_dest_is_link = is_directory_link(maafw_dest)
 
         if maafw_dest_is_link:
             print(Console.ok(t("inf_link_already_exists", path=maafw_dest)))
@@ -676,7 +697,11 @@ def install_maafw(
             if maafw_dest.is_dir():
                 def _delete_maafw_dest():
                     print(Console.info(t("inf_delete_old_dir", path=maafw_dest)))
-                    shutil.rmtree(maafw_dest)
+                    if is_directory_link(maafw_dest):
+                        # 链接（含 Windows Junction）只需删除链接本身，不能 rmtree 穿透目标目录
+                        maafw_dest.unlink(missing_ok=True)
+                    else:
+                        shutil.rmtree(maafw_dest)
                 try:
                     if not _retry_on_permission(_delete_maafw_dest, error_key="err_cannot_delete_maafw", path=maafw_dest):
                         return False, local_version, False
