@@ -95,6 +95,7 @@
                 "TrialOfSwordmancy.Decide",
                 "UpdateItemQuantity",
                 "WebEvent202605Action",
+                "ZiplineImport",
                 "autoEcoFarmInterruptibleSleep",
                 "autoEcoFarmOverrideTargetTemplate",
                 "autoEcoFarmResetSwipeState"
