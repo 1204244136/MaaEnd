@@ -527,8 +527,8 @@ std::optional<ZiplineRoute> PlanZiplineRoute(
     // 只有链首那一根要按提示上索, 中途都是从索上落到下一根架子上的
     best->mount_restand = MountStandPoint(param, locator_zone, best->towers.front(), supply_points);
 
-    LogInfo << "ZiplineRoute: picked" << VAR(baseline_length) << VAR(best->cost) << VAR(best->towers.size())
-            << VAR(best->towers.front().x) << VAR(best->towers.front().y) << VAR(best->towers.back().x) << VAR(best->towers.back().y);
+    LogInfo << "ZiplineRoute: picked" << VAR(baseline_length) << VAR(best->cost) << VAR(best->towers.size()) << VAR(best->towers.front().x)
+            << VAR(best->towers.front().y) << VAR(best->towers.back().x) << VAR(best->towers.back().y);
     return best;
 }
 

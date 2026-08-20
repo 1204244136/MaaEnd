@@ -49,6 +49,7 @@ std::optional<navmesh::BaseNavRouteResult> PlanNavmeshRoute(
     const navmesh::WorldPoint& goal,
     std::optional<double> goal_deck_y = std::nullopt,
     std::optional<double> start_floor_y = std::nullopt);
+
 // Which walkable surface `point` lands on: the planar distance to it, and its height on the same scale
 // as BaseNavRouteRequest::floor_y. Height matters as much as distance — a point directly above or below
 // a floor is a plane away from it and no distance test will say so.
@@ -57,6 +58,7 @@ struct NavmeshSnap
     double distance = 0.0;
     double height = 0.0;
 };
+
 // Nullopt when the zone can't resolve. The returned distance is the answer, not whether it returned:
 // snap falls back to a wider search on a small radius, so a hit can still be far outside `radius`, and
 // `floor_y` only ranks the candidates. Resolves the zone like PlanNavmeshRoute.

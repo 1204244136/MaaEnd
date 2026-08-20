@@ -452,17 +452,15 @@ void WebView2::ExecuteScript(std::string script, std::function<void(bool ok, std
         using ScriptHandler = ICoreWebView2ExecuteScriptCompletedHandler;
 
         std::wstring wscript = utf8ToWide(script);
-        HRESULT hr = webview_->ExecuteScript(
-            wscript.c_str(),
-            Callback<ScriptHandler>([on_done](HRESULT err, LPCWSTR result) -> HRESULT {
-                if (FAILED(err)) {
-                    LogError << "WebView2: ExecuteScript failed" << VAR(err);
-                }
-                if (on_done) {
-                    on_done(SUCCEEDED(err), result ? wideToUtf8(result) : std::string {});
-                }
-                return S_OK;
-            }).Get());
+        HRESULT hr = webview_->ExecuteScript(wscript.c_str(), Callback<ScriptHandler>([on_done](HRESULT err, LPCWSTR result) -> HRESULT {
+                                                                  if (FAILED(err)) {
+                                                                      LogError << "WebView2: ExecuteScript failed" << VAR(err);
+                                                                  }
+                                                                  if (on_done) {
+                                                                      on_done(SUCCEEDED(err), result ? wideToUtf8(result) : std::string {});
+                                                                  }
+                                                                  return S_OK;
+                                                              }).Get());
 
         if (FAILED(hr)) {
             LogError << "WebView2: ExecuteScript dispatch failed" << VAR(hr);
@@ -477,7 +475,10 @@ void WebView2::ExecuteScript(std::string script, std::function<void(bool ok, std
     }
 }
 
-void WebView2::CallDevToolsMethod(std::string method, std::string params_json, std::function<void(bool ok, std::string result_json)> on_done)
+void WebView2::CallDevToolsMethod(
+    std::string method,
+    std::string params_json,
+    std::function<void(bool ok, std::string result_json)> on_done)
 {
     auto task = [this, method = std::move(method), params_json = std::move(params_json), on_done]() {
         if (!webview_) {

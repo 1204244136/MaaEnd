@@ -201,8 +201,9 @@ double ZiplineFrames::maxSpan(const std::string& template_id) const
 
 double ZiplineFrames::supplyRadius(const std::string& template_id) const
 {
-    auto it =
-        std::find_if(power_sources_.begin(), power_sources_.end(), [&](const ZiplinePowerSource& s) { return s.template_id == template_id; });
+    auto it = std::find_if(power_sources_.begin(), power_sources_.end(), [&](const ZiplinePowerSource& s) {
+        return s.template_id == template_id;
+    });
     return it == power_sources_.end() ? 0.0 : it->radius;
 }
 

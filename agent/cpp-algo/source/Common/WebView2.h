@@ -82,7 +82,8 @@ public:
     void ExecuteScript(std::string script, std::function<void(bool ok, std::string result_json)> on_done);
 
     // 调用一次 CDP 方法。params_json 传空串等价于 "{}"。
-    void CallDevToolsMethod(std::string method, std::string params_json, std::function<void(bool ok, std::string result_json)> on_done = {});
+    void
+        CallDevToolsMethod(std::string method, std::string params_json, std::function<void(bool ok, std::string result_json)> on_done = {});
 
     // 订阅 CDP 事件（method 形如 "Network.responseReceived"），回调收到事件的 parameter JSON。
     // 同一 method 可重复订阅，各自独立触发；订阅随控件在 Close() 时一并释放。
@@ -168,7 +169,8 @@ public:
 
     // 没有内嵌浏览器可执行，一律以失败回调，调用方按「取不到数据」处理。
     void ExecuteScript(std::string script, std::function<void(bool ok, std::string result_json)> on_done);
-    void CallDevToolsMethod(std::string method, std::string params_json, std::function<void(bool ok, std::string result_json)> on_done = {});
+    void
+        CallDevToolsMethod(std::string method, std::string params_json, std::function<void(bool ok, std::string result_json)> on_done = {});
     void SubscribeDevToolsEvent(std::string method, std::function<void(std::string params_json)> on_event);
 };
 

@@ -200,7 +200,9 @@ size_t PersistCaptured(const std::vector<CapturedResponse>& captured, const std:
     size_t total = 0;
     for (auto& [map_id, marks] : by_map) {
         // 并起来之后去掉完全重合的重复标记，顺带把落盘顺序定死。
-        auto key = [](const ZiplineMark& m) { return std::tie(m.template_id, m.level_id, m.x, m.y, m.z); };
+        auto key = [](const ZiplineMark& m) {
+            return std::tie(m.template_id, m.level_id, m.x, m.y, m.z);
+        };
         std::sort(marks.begin(), marks.end(), [&key](const ZiplineMark& a, const ZiplineMark& b) { return key(a) < key(b); });
         marks.erase(
             std::unique(marks.begin(), marks.end(), [&key](const ZiplineMark& a, const ZiplineMark& b) { return key(a) == key(b); }),

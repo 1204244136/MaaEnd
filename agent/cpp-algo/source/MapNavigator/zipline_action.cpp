@@ -287,13 +287,11 @@ Result StartZiplineHop(
             // 判定圈收紧, 让人把差的那点走完。预筛一路开着, 提示先冒出来就先按下去
             if (!ctx.runtime_state->zipline_approach.press_missed) {
                 ctx.runtime_state->zipline_approach.press_missed = true;
-                const bool restood = waypoint.mount_restand
-                    && ctx.session->RetargetCurrentWaypoint(
-                        waypoint.mount_restand->x,
-                        waypoint.mount_restand->y,
-                        "zipline_mount_restand");
-                LogInfo << "No mount prompt at the tower; walking a bit around it for another look." << VAR(actual_distance)
-                        << VAR(restood) << VAR(kZiplineRestandBandWu);
+                const bool restood =
+                    waypoint.mount_restand
+                    && ctx.session->RetargetCurrentWaypoint(waypoint.mount_restand->x, waypoint.mount_restand->y, "zipline_mount_restand");
+                LogInfo << "No mount prompt at the tower; walking a bit around it for another look." << VAR(actual_distance) << VAR(restood)
+                        << VAR(kZiplineRestandBandWu);
                 result.consumed = true;
                 result.stay_in_current_tick = true;
                 return result;

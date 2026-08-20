@@ -57,8 +57,6 @@
     },
     // 只认图标不认字，为的是不必为一次确认付 OCR 的钱。roi 写 1280x720 基准帧的绝对坐标。
     "MapNavigatorZiplineMountScan": {
-        "pre_delay": 0,
-        "post_delay": 0,
         "recognition": {
             "type": "TemplateMatch",
             "param": {
@@ -71,6 +69,8 @@
                 "template": "MapNavigator/Zipline/InteractButton.png",
                 "threshold": 0.75
             }
-        }
+        },
+        "pre_delay": 0,
+        "post_delay": 0
     }
 }
