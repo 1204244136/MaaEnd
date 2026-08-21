@@ -726,14 +726,6 @@
             }
         }
     },
-    "__CharacterControllerShiftClickAction": {
-        "action": {
-            "type": "ClickKey",
-            "param": {
-                "key": 56
-            }
-        }
-    },
     "__CharacterControllerDeltaAltKeyDownAction": {
         "action": {
             "type": "KeyDown",
@@ -747,6 +739,14 @@
             "type": "KeyUp",
             "param": {
                 "key": 58
+            }
+        }
+    },
+    "__CharacterControllerShiftClickAction": {
+        "action": {
+            "type": "ClickKey",
+            "param": {
+                "key": 56
             }
         }
     },
