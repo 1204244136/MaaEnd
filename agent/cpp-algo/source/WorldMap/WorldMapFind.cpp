@@ -185,8 +185,7 @@ enum class ZoomOutResult
 // 判不出来当作还能缩——误判成「已最小」会让视口求解必然失败，多按一次只是白按
 ZoomOutResult PressZoomOutOnce(MaaContext* context)
 {
-    const std::string overrides =
-        json::value(json::object { { kZoomOutNode, json::object { { "timeout", 0 } } } }).dumps();
+    const std::string overrides = json::value(json::object { { kZoomOutNode, json::object { { "timeout", 0 } } } }).dumps();
 
     const MaaTaskId task_id = MaaContextRunTask(context, kZoomOutNode, overrides.c_str());
     if (task_id == MaaInvalidId) {
@@ -255,12 +254,8 @@ cv::Point2d DragMap(MaaController* controller, const cv::Rect& safe, const cv::P
     const cv::Point2d center(
         RandomIn(safe.x + std::abs(dx) / 2.0, safe.x + safe.width - std::abs(dx) / 2.0),
         RandomIn(safe.y + std::abs(dy) / 2.0, safe.y + safe.height - std::abs(dy) / 2.0));
-    const cv::Point from(
-        static_cast<int>(std::lround(center.x - dx / 2.0)),
-        static_cast<int>(std::lround(center.y - dy / 2.0)));
-    const cv::Point to(
-        static_cast<int>(std::lround(center.x + dx / 2.0)),
-        static_cast<int>(std::lround(center.y + dy / 2.0)));
+    const cv::Point from(static_cast<int>(std::lround(center.x - dx / 2.0)), static_cast<int>(std::lround(center.y - dy / 2.0)));
+    const cv::Point to(static_cast<int>(std::lround(center.x + dx / 2.0)), static_cast<int>(std::lround(center.y + dy / 2.0)));
 
     const int duration = static_cast<int>(
         std::clamp(std::hypot(dx, dy) / kSwipeSpeed, static_cast<double>(kSwipeDurationMin), static_cast<double>(kSwipeDurationMax)));
@@ -378,8 +373,7 @@ MaaBool MAA_CALL MapFindRun(
 
     const bool wantUnlocked = param.state != "locked";
     if (!param.state.empty() && spec && spec->spot.minGoldRatio <= 0.0) {
-        LogError << "WorldMap: this icon has no unlock threshold, 'state' cannot be judged" << VAR(param.icon)
-                 << VAR(param.state);
+        LogError << "WorldMap: this icon has no unlock threshold, 'state' cannot be judged" << VAR(param.icon) << VAR(param.state);
         return false;
     }
 
@@ -447,8 +441,8 @@ MaaBool MAA_CALL MapFindRun(
             if (want >= kGainMinSpan && got >= want * kGainMinRatio) {
                 gain = std::clamp(want / got, 1.0, kGainMax);
             }
-            LogInfo << "WorldMap: drag delivered" << VAR(issued.x) << VAR(issued.y) << VAR(moved.x) << VAR(moved.y)
-                    << VAR(gain) << VAR(stallX) << VAR(stallY);
+            LogInfo << "WorldMap: drag delivered" << VAR(issued.x) << VAR(issued.y) << VAR(moved.x) << VAR(moved.y) << VAR(gain)
+                    << VAR(stallX) << VAR(stallY);
         }
         previous = viewport;
         issued = { 0.0, 0.0 };
@@ -466,17 +460,17 @@ MaaBool MAA_CALL MapFindRun(
                 const cv::Rect usable = WorldMapSolver::SafeArea(screen.size(), kIconArea, 0);
                 const cv::Point at(static_cast<int>(std::lround(expected.x)), static_cast<int>(std::lround(expected.y)));
                 if (!usable.contains(at)) {
-                    LogError << "WorldMap: the map will not pan any further and the target is out of reach" << VAR(param.zone)
-                             << VAR(pans) << VAR(expected.x) << VAR(expected.y) << VAR(stallX) << VAR(stallY);
+                    LogError << "WorldMap: the map will not pan any further and the target is out of reach" << VAR(param.zone) << VAR(pans)
+                             << VAR(expected.x) << VAR(expected.y) << VAR(stallX) << VAR(stallY);
                     return false;
                 }
-                LogWarn << "WorldMap: the map will not pan any further, taking the target where it stands" << VAR(param.zone)
-                        << VAR(pans) << VAR(expected.x) << VAR(expected.y) << VAR(stallX) << VAR(stallY);
+                LogWarn << "WorldMap: the map will not pan any further, taking the target where it stands" << VAR(param.zone) << VAR(pans)
+                        << VAR(expected.x) << VAR(expected.y) << VAR(stallX) << VAR(stallY);
             }
             else {
                 ++pans;
-                LogInfo << "WorldMap: target outside safe area, panning" << VAR(expected.x) << VAR(expected.y) << VAR(need.x)
-                        << VAR(need.y) << VAR(gain);
+                LogInfo << "WorldMap: target outside safe area, panning" << VAR(expected.x) << VAR(expected.y) << VAR(need.x) << VAR(need.y)
+                        << VAR(gain);
                 screen.release();
                 issued = DragMap(controller, safe, need * gain);
                 if (std::hypot(issued.x, issued.y) < 1.0) {
@@ -555,8 +549,8 @@ MaaBool MAA_CALL MapFindRun(
     }
 
     // 认不出图标又没有角色标记佐证时就不给坐标：宁可让上层走失败分支，也不交一个算出来的空位置
-    LogError << "WorldMap: gave up without a confirmed icon" << VAR(param.zone) << VAR(target.x) << VAR(target.y)
-             << VAR(param.icon) << VAR(param.max_attempts);
+    LogError << "WorldMap: gave up without a confirmed icon" << VAR(param.zone) << VAR(target.x) << VAR(target.y) << VAR(param.icon)
+             << VAR(param.max_attempts);
     return false;
 }
 
