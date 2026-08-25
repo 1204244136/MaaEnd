@@ -1215,10 +1215,10 @@ def _find_cpp_algo_in_ci(
         result = _find_cpp_algo_artifact_in_runs(auth_headers, runs, artifact_name)
         return result
 
-    # A non-main checkout can be represented by a pull_request or a manually
-    # dispatched workflow. Matching HEAD first prevents selecting an older
-    # artifact from the same branch after it has moved on.
-    if checkout_branch != MAIN_BRANCH:
+    # Only a normalized non-main branch may use the current HEAD as a precise
+    # match. Detached checkouts normalize to v2 and must stay on its push-only
+    # artifact path.
+    if branch != MAIN_BRANCH:
         head_sha = _current_git_head_sha()
         if head_sha:
             head_query = urlencode({
