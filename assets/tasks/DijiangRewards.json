@@ -767,15 +767,8 @@
                 {
                     "name": "No",
                     "pipeline_override": {
-                        "GrowthChamberCheckTargetNotEmpty": {
-                            "recognition": {
-                                "type": "And",
-                                "param": {
-                                    "all_of": [
-                                        "GrowthChamberCheckSeedNotEmpty"
-                                    ]
-                                }
-                            }
+                        "GrowthChamberFindTargetByPlant": {
+                            "enabled": false
                         },
                         "GrowthChamberSeedExtract": {
                             "enabled": false
