@@ -13,9 +13,9 @@
             "image": "武陵_任务_送货任务_前往仓储节点接取货物.png",
             "hits": [
                 "AutoDeliveryRecognizeDepot",
-                "AutoDeliveryInMissionMenu",
+                "InMenuMission",
                 "AutoDeliverySelectDeliveryMission",
-                "AutoDeliveryDeliveryMissionSelected"
+                "AutoDeliveryCheckDeliveryMissionSelected"
             ]
         },
         {
@@ -24,9 +24,9 @@
             "hits": [
                 "AutoDeliveryRecognizeDestination",
                 "AutoDeliveryRecognizeDepot",
-                "AutoDeliveryInMissionMenu",
+                "InMenuMission",
                 "AutoDeliverySelectDeliveryMission",
-                "AutoDeliveryDeliveryMissionSelected"
+                "AutoDeliveryCheckDeliveryMissionSelected"
             ]
         }
     ]

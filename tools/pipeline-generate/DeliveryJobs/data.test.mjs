@@ -898,12 +898,13 @@ test("DeliveryJobs and SeizeDeliveryJobs compose AutoDelivery through continuati
     assert.equal(JSON.stringify(seize).includes("AutoDelivery/CarryingGoods.png"), false);
 });
 
-test("AutoDelivery keeps its task-detail entry and default branch flow explicit", () => {
+test("AutoDelivery ensures the delivery mission detail before branching", () => {
     const common = readGeneratedPipeline("AutoDelivery", "Common.json");
+    const commonAdb = readAdbPipeline("AutoDelivery", "Common.json");
     const pickup = readGeneratedPipeline("AutoDelivery", "Pickup.json");
-    const pickupAdb = readAdbPipeline("AutoDelivery", "Pickup.json");
     const delivery = readGeneratedPipeline("AutoDelivery", "Delivery.json");
     const sceneMenu = readGeneratedPipeline("SceneManager", "SceneMenu.json");
+    const missionScene = readGeneratedPipeline("Interface", "InScene", "Mission.json");
 
     const pipeline = {
         ...common,
@@ -911,6 +912,11 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         ...delivery,
     };
     assert.ok(pipeline.AutoDelivery);
+    assert.equal(Object.keys(common)[0], "AutoDelivery");
+    assert.equal(Object.keys(pickup)[0], "AutoDeliveryRecognizeDepot");
+    assert.equal(Object.keys(delivery)[0], "AutoDeliveryRecognizeDestination");
+    assert.equal(common.AutoDeliveryRecognizeDepot, undefined);
+    assert.equal(common.AutoDeliveryRecognizeDestination, undefined);
     assert.equal(
         Object.keys(pipeline).some((node) => node.startsWith("__")),
         false,
@@ -919,16 +925,18 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     assert.deepEqual(common.AutoDelivery.focus, {
         "Node.Recognition.Succeeded": "$task.AutoDelivery.focus.start",
     });
-    assert.deepEqual(common.AutoDelivery.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryAreaOCR",
-        "AutoDeliveryCurrentJobActionButton",
-    ]);
-    assert.deepEqual(common.AutoDeliveryCurrentJobActionButton.any_of, [
-        "TrackedMissionMapButton",
-        "AutoDeliveryStartTrackingButton",
-    ]);
-    assert.deepEqual(common.AutoDeliveryStartTrackingButton.template, [
+    assert.equal(common.AutoDelivery.recognition, undefined);
+    assert.equal(common.AutoDelivery.action, "Custom");
+    assert.equal(common.AutoDelivery.custom_action, "SubTask");
+    assert.deepEqual(common.AutoDelivery.custom_action_param, {
+        sub: [
+            "AutoDeliveryEnsureDeliveryMissionSelected",
+        ],
+        continue: false,
+        strict: true,
+    });
+    assert.equal(common.AutoDeliveryCheckCurrentJobActionButton, undefined);
+    assert.deepEqual(common.AutoDeliveryCheckStartTrackingButton.template, [
         "Common/Button/WhiteConfirmButtonType1.png",
         "Common/Button/WhiteConfirmButtonType1Hover.png",
     ]);
@@ -936,33 +944,32 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         "AutoDeliveryRecognizeDestination",
         "AutoDeliveryRecognizeDepot",
     ]);
-    assert.deepEqual(common.AutoDeliveryRecognizeDepot.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryAreaOCR",
+    assert.deepEqual(pickup.AutoDeliveryRecognizeDepot.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckAreaText",
     ]);
-    assert.equal(common.AutoDeliveryRecognizeDepot.custom_action, "AutoDeliveryResolveDepotAction");
-    assert.equal(common.AutoDeliveryRecognizeDepot.custom_action_param, undefined);
-    assert.deepEqual(common.AutoDeliveryRecognizeDepot.next, [
+    assert.equal(pickup.AutoDeliveryRecognizeDepot.custom_action, "AutoDeliveryResolveDepotAction");
+    assert.equal(pickup.AutoDeliveryRecognizeDepot.custom_action_param, undefined);
+    assert.deepEqual(pickup.AutoDeliveryRecognizeDepot.next, [
         "AutoDeliveryQuickTeleport",
     ]);
-    assert.deepEqual(common.AutoDeliveryRecognizeDestination.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryAreaOCR",
-        "AutoDeliveryDestinationField",
+    assert.deepEqual(delivery.AutoDeliveryRecognizeDestination.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckAreaText",
+        "AutoDeliveryCheckDestinationField",
     ]);
-    assert.equal(common.AutoDeliveryRecognizeDestination.custom_action, "AutoDeliveryResolveDestinationAction");
-    assert.equal(common.AutoDeliveryRecognizeDestination.custom_action_param, undefined);
-    assert.deepEqual(common.AutoDeliveryRecognizeDestination.next, [
+    assert.equal(delivery.AutoDeliveryRecognizeDestination.custom_action, "AutoDeliveryResolveDestinationAction");
+    assert.equal(delivery.AutoDeliveryRecognizeDestination.custom_action_param, undefined);
+    assert.deepEqual(delivery.AutoDeliveryRecognizeDestination.next, [
         "[Anchor]AutoDeliveryAfterRecognizeDestination",
         "AutoDeliveryAfterResolveDestination",
     ]);
     assert.deepEqual(delivery.AutoDeliveryAfterResolveDestination.next, [
         "AutoDeliveryCancelCurrentJobTracking",
-        "AutoDeliveryCurrentJobTrackingAlreadyOff",
+        "AutoDeliveryCheckCurrentJobTrackingAlreadyOff",
     ]);
     assert.deepEqual(delivery.AutoDeliveryPrepareNavigateDestination.custom_action_param, {
         sub: [
-            "SceneEnterMenuMission",
             "AutoDeliveryEnsureDeliveryMissionSelected",
         ],
         continue: false,
@@ -970,7 +977,7 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     });
     assert.deepEqual(delivery.AutoDeliveryPrepareNavigateDestination.next, [
         "AutoDeliveryCancelCurrentJobTracking",
-        "AutoDeliveryCurrentJobTrackingAlreadyOff",
+        "AutoDeliveryCheckCurrentJobTrackingAlreadyOff",
     ]);
     assert.deepEqual(pickup.AutoDeliveryNavigateDepot.attach, {
         zip: false,
@@ -978,14 +985,13 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     assert.deepEqual(delivery.AutoDeliveryNavigateDestination.attach, {
         zip: false,
     });
-    assert.deepEqual(pickup.AutoDeliveryQuickTeleportDone.next, [
+    assert.deepEqual(pickup.AutoDeliveryInWorldAfterQuickTeleport.next, [
         "[Anchor]AutoDeliveryAfterQuickTeleport",
         "AutoDeliveryPrepareNavigateDepot",
     ]);
     assert.equal(pickup.AutoDeliveryPrepareNavigateDepot.custom_action, "SubTask");
     assert.deepEqual(pickup.AutoDeliveryPrepareNavigateDepot.custom_action_param, {
         sub: [
-            "SceneEnterMenuMission",
             "AutoDeliveryEnsureDeliveryMissionSelected",
         ],
         continue: false,
@@ -993,28 +999,28 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     });
     assert.deepEqual(pickup.AutoDeliveryPrepareNavigateDepot.next, [
         "AutoDeliveryCancelTrackingBeforeNavigateDepot",
-        "AutoDeliveryTrackingAlreadyOffBeforeNavigateDepot",
+        "AutoDeliveryCheckTrackingAlreadyOffBeforeNavigateDepot",
     ]);
     assert.deepEqual(pickup.AutoDeliveryCancelTrackingBeforeNavigateDepot.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryCancelCurrentJobTrackingButton",
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckCancelCurrentJobTrackingButton",
     ]);
     assert.equal(pickup.AutoDeliveryCancelTrackingBeforeNavigateDepot.action, "Click");
     assert.deepEqual(pickup.AutoDeliveryCancelTrackingBeforeNavigateDepot.next, [
-        "AutoDeliveryTrackingGoneBeforeNavigateDepot",
+        "AutoDeliveryCheckTrackingGoneBeforeNavigateDepot",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryTrackingAlreadyOffBeforeNavigateDepot.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryStartTrackingButton",
+    assert.deepEqual(pickup.AutoDeliveryCheckTrackingAlreadyOffBeforeNavigateDepot.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckStartTrackingButton",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryTrackingAlreadyOffBeforeNavigateDepot.next, [
+    assert.deepEqual(pickup.AutoDeliveryCheckTrackingAlreadyOffBeforeNavigateDepot.next, [
         "AutoDeliveryReturnWorldAndNavigateDepot",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryTrackingGoneBeforeNavigateDepot.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryStartTrackingButton",
+    assert.deepEqual(pickup.AutoDeliveryCheckTrackingGoneBeforeNavigateDepot.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckStartTrackingButton",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryTrackingGoneBeforeNavigateDepot.next, [
+    assert.deepEqual(pickup.AutoDeliveryCheckTrackingGoneBeforeNavigateDepot.next, [
         "AutoDeliveryReturnWorldAndNavigateDepot",
     ]);
     assert.deepEqual(pickup.AutoDeliveryReturnWorldAndNavigateDepot.custom_action_param.sub, [
@@ -1024,11 +1030,11 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         "AutoDeliveryNavigateDepot",
     ]);
     assert.deepEqual(pickup.AutoDeliveryStartTrackingTask.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryStartTrackingButton",
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckStartTrackingButton",
     ]);
     assert.deepEqual(pickup.AutoDeliveryViewDestinationMap.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
+        "AutoDeliveryInDeliveryMissionDetail",
         "TrackedMissionMapButton",
     ]);
     assert.equal(pickup.AutoDeliveryNavigateDepot.custom_action, "FalseAction");
@@ -1037,15 +1043,15 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         "AutoDeliveryFetchGoods",
     ]);
     assert.deepEqual(pickup.AutoDeliveryFetchGoods.next, [
-        "AutoDeliveryFetchGoodsButtonWaitFreezes",
+        "AutoDeliveryCheckFetchGoodsButton",
         "AutoDeliverySearchFetchGoodsButton",
     ]);
     assert.equal(pickup.AutoDeliverySearchFetchGoodsButton.custom_action, "CharacterSearchAction");
     assert.deepEqual(pickup.AutoDeliverySearchFetchGoodsButton.custom_action_param.wait_nodes, [
-        "AutoDeliveryFetchGoodsButtonWaitFreezes",
+        "AutoDeliveryCheckFetchGoodsButton",
     ]);
     assert.deepEqual(pickup.AutoDeliverySearchFetchGoodsButton.next, [
-        "AutoDeliveryFetchGoodsButtonWaitFreezes",
+        "AutoDeliveryCheckFetchGoodsButton",
     ]);
     assert.deepEqual(pickup.AutoDeliverySearchFetchGoodsButton.on_error, [
         "AutoDeliveryRetryNavigateDepot",
@@ -1053,9 +1059,9 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     assert.equal(pickup.AutoDeliveryRetryNavigateDepot.enabled, false);
     assert.equal(pickup.AutoDeliveryRetryNavigateDepot.custom_action, "FalseAction");
     assert.deepEqual(pickup.AutoDeliveryRetryNavigateDepot.next, [
-        "AutoDeliveryFetchGoodsButtonWaitFreezes",
+        "AutoDeliveryCheckFetchGoodsButton",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryFetchGoodsButtonWaitFreezes.pre_wait_freezes, {
+    assert.deepEqual(pickup.AutoDeliveryCheckFetchGoodsButton.pre_wait_freezes, {
         time: 300,
         target: [
             763,
@@ -1065,9 +1071,9 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         ],
     });
     assert.deepEqual(pickup.AutoDeliveryFetchGoodsButton.all_of, [
-        "AutoDeliveryFetchGoodsButtonWaitFreezes",
+        "AutoDeliveryCheckFetchGoodsButton",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryFetchGoodsDone.next, [
+    assert.deepEqual(pickup.AutoDeliveryCheckCarryingGoods.next, [
         "AutoDeliveryOpenMissionAfterFetchGoods",
     ]);
     assert.deepEqual(pickup.AutoDeliveryOpenMissionAfterFetchGoods.next, [
@@ -1076,27 +1082,47 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     assert.equal(pickup.AutoDeliveryOpenMissionAfterFetchGoods.custom_action, "SubTask");
     assert.deepEqual(pickup.AutoDeliveryOpenMissionAfterFetchGoods.custom_action_param, {
         sub: [
-            "SceneEnterMenuMission",
             "AutoDeliveryEnsureDeliveryMissionSelected",
         ],
         continue: false,
         strict: true,
     });
-    assert.deepEqual(pickup.AutoDeliveryEnsureDeliveryMissionSelected.next, [
-        "AutoDeliveryDeliveryMissionSelected",
-        "AutoDeliverySelectDeliveryMission",
-        "[JumpBack]AutoDeliveryScrollMissionList",
-        "AutoDeliveryDeliveryMissionNotFound",
+    assert.deepEqual(common.AutoDeliveryEnsureDeliveryMissionSelected.next, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryOpenDeliveryMission",
     ]);
-    assert.equal(pickup.AutoDeliveryEnsureDeliveryMissionSelected.custom_action, "ClearHitCount");
-    assert.deepEqual(pickup.AutoDeliveryEnsureDeliveryMissionSelected.custom_action_param, {
-        nodes: [
-            "AutoDeliveryScrollMissionList",
+    assert.equal(common.AutoDeliveryEnsureDeliveryMissionSelected.action, undefined);
+    assert.equal(common.AutoDeliveryOpenDeliveryMission.custom_action, "SubTask");
+    assert.deepEqual(common.AutoDeliveryOpenDeliveryMission.custom_action_param, {
+        sub: [
+            "SceneEnterMenuMission",
+            "AutoDeliverySelectDeliveryMissionFromList",
         ],
+        continue: false,
         strict: true,
     });
+    assert.deepEqual(common.AutoDeliverySelectDeliveryMissionFromList.next, [
+        "AutoDeliveryCheckDeliveryMissionSelected",
+        "AutoDeliverySelectDeliveryMission",
+        "AutoDeliveryCheckDeliveryMissionListComplete",
+        "[JumpBack]AutoDeliveryScrollMissionList",
+    ]);
+    assert.equal(common.AutoDeliverySelectDeliveryMissionFromList.custom_action, "PipelineOverrideAction");
+    assert.deepEqual(common.AutoDeliverySelectDeliveryMissionFromList.custom_action_param, {
+        patch: {
+            AutoDeliveryCheckDeliveryMissionListComplete: {
+                attach: {
+                    ready: false,
+                },
+            },
+        },
+    });
+    assert.equal(common.AutoDeliveryCheckDeliveryMissionListComplete.custom_recognition, "ListCompleteRecognition");
+    assert.deepEqual(common.AutoDeliveryCheckDeliveryMissionListComplete.custom_recognition_param, {
+        threshold: 0.98,
+    });
     assert.deepEqual(
-        pickup.AutoDeliveryDeliveryMissionListItem.roi,
+        common.AutoDeliveryCheckDeliveryMissionListComplete.roi,
         [
             42,
             70,
@@ -1104,51 +1130,66 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
             590,
         ],
     );
-    assert.deepEqual(pickup.AutoDeliveryDeliveryMissionListItem.expected, [
+    assert.deepEqual(common.AutoDeliveryCheckDeliveryMissionListComplete.attach, {
+        ready: false,
+    });
+    assert.deepEqual(common.AutoDeliveryCheckDeliveryMissionListComplete.next, [
+        "AutoDeliveryDeliveryMissionNotFound",
+    ]);
+    assert.deepEqual(
+        common.AutoDeliveryCheckDeliveryMissionListItem.roi,
+        [
+            42,
+            70,
+            360,
+            590,
+        ],
+    );
+    assert.deepEqual(common.AutoDeliveryCheckDeliveryMissionListItem.expected, [
         "送货任务",
         "送貨任務",
         "(?i)Delivery\\s*Job",
         "配達任務",
         "배송 임무",
     ]);
-    assert.deepEqual(pickup.AutoDeliverySelectDeliveryMission.all_of, [
-        "AutoDeliveryInMissionMenu",
-        "AutoDeliveryDeliveryMissionListItem",
+    assert.deepEqual(common.AutoDeliverySelectDeliveryMission.all_of, [
+        "InMenuMission",
+        "AutoDeliveryCheckDeliveryMissionListItem",
     ]);
-    assert.equal(pickup.AutoDeliverySelectDeliveryMission.action, "Click");
-    assert.deepEqual(pickup.AutoDeliverySelectDeliveryMission.next, [
-        "AutoDeliveryDeliveryMissionSelected",
+    assert.equal(common.AutoDeliverySelectDeliveryMission.action, "Click");
+    assert.deepEqual(common.AutoDeliverySelectDeliveryMission.next, [
+        "AutoDeliveryCheckDeliveryMissionSelected",
     ]);
-    assert.equal(pickup.AutoDeliveryScrollMissionList.max_hit, 3);
-    assert.deepEqual(pickup.AutoDeliveryScrollMissionList.all_of, [
-        "AutoDeliveryInMissionMenu",
+    assert.equal(common.AutoDeliveryScrollMissionList.max_hit, undefined);
+    assert.deepEqual(common.AutoDeliveryScrollMissionList.all_of, [
+        "InMenuMission",
     ]);
-    assert.equal(pickup.AutoDeliveryScrollMissionList.action, "Swipe");
+    assert.equal(common.AutoDeliveryScrollMissionList.action, "Swipe");
     assert.deepEqual(
-        pickup.AutoDeliveryScrollMissionList.begin,
+        common.AutoDeliveryScrollMissionList.begin,
         [
             220,
             580,
         ],
     );
     assert.deepEqual(
-        pickup.AutoDeliveryScrollMissionList.end,
+        common.AutoDeliveryScrollMissionList.end,
         [
             220,
             250,
         ],
     );
-    assert.deepEqual(pickup.AutoDeliveryDeliveryMissionNotFound.all_of, [
-        "AutoDeliveryInMissionMenu",
+    assert.deepEqual(common.AutoDeliveryDeliveryMissionNotFound.all_of, [
+        "InMenuMission",
     ]);
-    assert.equal(pickup.AutoDeliveryDeliveryMissionNotFound.custom_action, "FalseAction");
-    assert.equal(pickup.AutoDeliveryDeliveryMissionSelected.next, undefined);
-    assert.deepEqual(pickup.AutoDeliveryCurrentDeliveryMissionDetail.all_of, [
-        "AutoDeliveryInMissionMenu",
-        "AutoDeliveryDeliveryMissionSelected",
+    assert.equal(common.AutoDeliveryDeliveryMissionNotFound.custom_action, "FalseAction");
+    assert.equal(common.AutoDeliveryCheckDeliveryMissionSelected.next, undefined);
+    assert.deepEqual(common.AutoDeliveryInDeliveryMissionDetail.all_of, [
+        "InMenuMission",
+        "AutoDeliveryCheckDeliveryMissionSelected",
     ]);
     assert.deepEqual(
-        pickupAdb.AutoDeliveryDeliveryMissionListItem.roi,
+        commonAdb.AutoDeliveryCheckDeliveryMissionListComplete.roi,
         [
             105,
             85,
@@ -1157,7 +1198,16 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         ],
     );
     assert.deepEqual(
-        pickupAdb.AutoDeliveryDeliveryMissionSelected.roi,
+        commonAdb.AutoDeliveryCheckDeliveryMissionListItem.roi,
+        [
+            105,
+            85,
+            450,
+            590,
+        ],
+    );
+    assert.deepEqual(
+        commonAdb.AutoDeliveryCheckDeliveryMissionSelected.roi,
         [
             570,
             70,
@@ -1165,7 +1215,7 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
             60,
         ],
     );
-    assert.deepEqual(pickupAdb.AutoDeliveryScrollMissionList.post_wait_freezes, {
+    assert.deepEqual(commonAdb.AutoDeliveryScrollMissionList.post_wait_freezes, {
         time: 300,
         target: [
             105,
@@ -1174,6 +1224,41 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
             590,
         ],
     });
+    for (const node of [
+        "AutoDeliveryCheckDeliveryMissionListComplete",
+        "AutoDeliveryCheckDeliveryMissionListItem",
+        "AutoDeliveryCheckDeliveryMissionSelected",
+        "AutoDeliveryDeliveryMissionNotFound",
+        "AutoDeliveryEnsureDeliveryMissionSelected",
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryOpenDeliveryMission",
+        "AutoDeliveryScrollMissionList",
+        "AutoDeliverySelectDeliveryMission",
+        "AutoDeliverySelectDeliveryMissionFromList",
+    ]) {
+        assert.ok(common[node], `${node} should be defined in Common.json`);
+        assert.equal(pickup[node], undefined, `${node} should not be defined in Pickup.json`);
+    }
+    assert.equal(common.AutoDeliveryInMissionMenu, undefined);
+    assert.deepEqual(
+        missionScene.InMenuMission.recognition.param.roi,
+        [
+            0,
+            0,
+            150,
+            70,
+        ],
+    );
+    assert.deepEqual(missionScene.InMenuMission.recognition.param.expected, [
+        "任务",
+        "任務",
+        "(?i)Missions",
+        "任務",
+        "임무",
+    ]);
+    assert.deepEqual(sceneMenu.__ScenePrivateAnyEnterMenuMissionSuccess.all_of, [
+        "InMenuMission",
+    ]);
     assert.equal(sceneMenu.__ScenePrivateMenuListScrollToMission.max_hit, 3);
     assert.equal(sceneMenu.__ScenePrivateWorldEnterMenuMission.action.param.custom_action, "ClearHitCount");
     assert.deepEqual(sceneMenu.__ScenePrivateWorldEnterMenuMission.action.param.custom_action_param, {
@@ -1183,25 +1268,25 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         strict: true,
     });
     assert.deepEqual(delivery.AutoDeliveryCancelCurrentJobTracking.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryCancelCurrentJobTrackingButton",
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckCancelCurrentJobTrackingButton",
     ]);
     assert.equal(delivery.AutoDeliveryCancelCurrentJobTracking.action, "Click");
     assert.deepEqual(delivery.AutoDeliveryCancelCurrentJobTracking.next, [
-        "AutoDeliveryCurrentJobTrackingGone",
+        "AutoDeliveryCheckCurrentJobTrackingGone",
     ]);
-    assert.deepEqual(delivery.AutoDeliveryCurrentJobTrackingAlreadyOff.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryStartTrackingButton",
+    assert.deepEqual(delivery.AutoDeliveryCheckCurrentJobTrackingAlreadyOff.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckStartTrackingButton",
     ]);
-    assert.deepEqual(delivery.AutoDeliveryCurrentJobTrackingAlreadyOff.next, [
+    assert.deepEqual(delivery.AutoDeliveryCheckCurrentJobTrackingAlreadyOff.next, [
         "AutoDeliveryReturnWorldAndNavigateDestination",
     ]);
-    assert.deepEqual(delivery.AutoDeliveryCurrentJobTrackingGone.all_of, [
-        "AutoDeliveryCurrentDeliveryMissionDetail",
-        "AutoDeliveryStartTrackingButton",
+    assert.deepEqual(delivery.AutoDeliveryCheckCurrentJobTrackingGone.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckStartTrackingButton",
     ]);
-    assert.deepEqual(delivery.AutoDeliveryCurrentJobTrackingGone.next, [
+    assert.deepEqual(delivery.AutoDeliveryCheckCurrentJobTrackingGone.next, [
         "AutoDeliveryReturnWorldAndNavigateDestination",
     ]);
     assert.deepEqual(delivery.AutoDeliveryReturnWorldAndNavigateDestination.custom_action_param.sub, [
@@ -1213,15 +1298,15 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     assert.equal(delivery.AutoDeliveryNavigateDestination.custom_action, "FalseAction");
     assert.equal(delivery.AutoDeliveryNavigateDestination.custom_action_param, undefined);
     assert.deepEqual(delivery.AutoDeliveryNavigateDestination.next, [
-        "AutoDeliverySubmitGoodsWaitFreezes",
+        "AutoDeliveryCheckSubmitGoodsButton",
         "AutoDeliverySearchSubmitGoodsButton",
     ]);
     assert.equal(delivery.AutoDeliverySearchSubmitGoodsButton.custom_action, "CharacterSearchAction");
     assert.deepEqual(delivery.AutoDeliverySearchSubmitGoodsButton.custom_action_param.wait_nodes, [
-        "AutoDeliverySubmitGoodsWaitFreezes",
+        "AutoDeliveryCheckSubmitGoodsButton",
     ]);
     assert.deepEqual(delivery.AutoDeliverySearchSubmitGoodsButton.next, [
-        "AutoDeliverySubmitGoodsWaitFreezes",
+        "AutoDeliveryCheckSubmitGoodsButton",
     ]);
     assert.deepEqual(delivery.AutoDeliverySearchSubmitGoodsButton.on_error, [
         "AutoDeliveryRetryNavigateDestination",
@@ -1229,9 +1314,9 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
     assert.equal(delivery.AutoDeliveryRetryNavigateDestination.enabled, false);
     assert.equal(delivery.AutoDeliveryRetryNavigateDestination.custom_action, "FalseAction");
     assert.deepEqual(delivery.AutoDeliveryRetryNavigateDestination.next, [
-        "AutoDeliverySubmitGoodsWaitFreezes",
+        "AutoDeliveryCheckSubmitGoodsButton",
     ]);
-    assert.deepEqual(delivery.AutoDeliverySubmitGoodsWaitFreezes.pre_wait_freezes, {
+    assert.deepEqual(delivery.AutoDeliveryCheckSubmitGoodsButton.pre_wait_freezes, {
         time: 300,
         target: [
             760,
@@ -1241,7 +1326,7 @@ test("AutoDelivery keeps its task-detail entry and default branch flow explicit"
         ],
     });
     assert.deepEqual(delivery.AutoDeliverySubmitGoods.all_of, [
-        "AutoDeliverySubmitGoodsWaitFreezes",
+        "AutoDeliveryCheckSubmitGoodsButton",
     ]);
     assert.deepEqual(delivery.AutoDeliverySubmitGoods.next, [
         "AutoDeliverySkipChat",
