@@ -440,7 +440,7 @@ test("DeliveryJobs exposes automatic delivery for supported depots with shared s
             DeliveryJobsRedistributionBidAction: "DeliveryJobsRedistributionBidNextStep",
             DeliveryJobsOngoingDeliveryAction: openOngoingAutoDelivery,
             DeliveryJobsAfterAcceptJob: "DeliveryJobsDeliverQuickly",
-            DeliveryJobsGoToDepot: openOngoingAutoDelivery,
+            DeliveryJobsGoToDepot: autoDelivery,
         });
         assert.equal(ordinaryAutoOverride.AutoDeliveryOpenCurrentJobDetail, undefined);
         assert.equal(ordinaryAutoOverride.AutoDeliveryPostDepartureEntry, undefined);
@@ -457,7 +457,7 @@ test("DeliveryJobs exposes automatic delivery for supported depots with shared s
                 [`DeliveryJobs${depot.Id}Quote${comparison}`]: {
                     anchor: {
                         DeliveryJobsQuoteAction: "DeliveryJobsQuoteAcceptJobOnly",
-                        DeliveryJobsGoToDepot: openOngoingAutoDelivery,
+                        DeliveryJobsGoToDepot: autoDelivery,
                     },
                 },
             });
@@ -595,7 +595,7 @@ test("DeliveryJobs quote branches share actions with branch-specific defaults", 
                     ? [
                           {
                               DeliveryJobsQuoteAction: "DeliveryJobsQuoteAcceptJobOnly",
-                              DeliveryJobsGoToDepot: `DeliveryJobsOpenOngoingAutoDelivery${depot.Id}`,
+                              DeliveryJobsGoToDepot: `DeliveryJobsAutoDelivery${depot.Id}`,
                           },
                       ]
                     : []),
@@ -853,19 +853,77 @@ test("DeliveryJobs and SeizeDeliveryJobs compose AutoDelivery through continuati
     const seize = readGeneratedPipeline("SeizeDeliveryJobs", "AutoDeliveryAdapter.json");
     assert.equal(seize.SeizeDeliveryJobsPostProcessingEntry.anchor, undefined);
     assert.deepEqual(seize.SeizeDeliveryJobsTeleport.anchor, {
-        SeizeDeliveryJobsAfterEnterCurrentJobDetail: "AutoDelivery",
         AutoDeliveryAfterRecognizeDestination: "SeizeDeliveryJobsDeliveryCannotTeleport",
         AutoDeliveryAfterQuickTeleport: "SeizeDeliveryJobsSuccessTeleportDone",
     });
+    assert.deepEqual(seize.SeizeDeliveryJobsTeleport.next, [
+        "AutoDelivery",
+    ]);
     assert.deepEqual(seize.SeizeDeliveryJobsTeleportAndWalk.anchor, {
-        SeizeDeliveryJobsAfterEnterCurrentJobDetail: "AutoDelivery",
         AutoDeliveryAfterRecognizeDestination: "SeizeDeliveryJobsDeliveryCannotTeleport",
-        AutoDeliveryAfterNavigateDepot: "SeizeDeliveryJobsSuccessWalkDone",
+        AutoDeliveryAfterNavigateDepot: "SeizeDeliveryJobsRestoreTrackingAfterWalk",
     });
+    assert.deepEqual(seize.SeizeDeliveryJobsTeleportAndWalk.next, [
+        "AutoDelivery",
+    ]);
+    assert.equal(seize.SeizeDeliveryJobsRestoreTrackingAfterWalk.custom_action, "SubTask");
+    assert.deepEqual(seize.SeizeDeliveryJobsRestoreTrackingAfterWalk.custom_action_param, {
+        sub: [
+            "AutoDeliveryEnsureDeliveryMissionSelected",
+        ],
+        continue: false,
+        strict: true,
+    });
+    assert.deepEqual(seize.SeizeDeliveryJobsRestoreTrackingAfterWalk.next, [
+        "SeizeDeliveryJobsCheckDeliveryMissionTrackedAfterWalk",
+        "SeizeDeliveryJobsStartTrackingAfterWalk",
+    ]);
+    assert.deepEqual(seize.SeizeDeliveryJobsCheckDeliveryMissionTrackedAfterWalk.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckCancelCurrentJobTrackingButton",
+    ]);
+    assert.deepEqual(seize.SeizeDeliveryJobsCheckDeliveryMissionTrackedAfterWalk.next, [
+        "SeizeDeliveryJobsReturnWorldAfterTracking",
+    ]);
+    assert.deepEqual(seize.SeizeDeliveryJobsStartTrackingAfterWalk.all_of, [
+        "AutoDeliveryInDeliveryMissionDetail",
+        "AutoDeliveryCheckStartTrackingButton",
+    ]);
+    assert.equal(seize.SeizeDeliveryJobsStartTrackingAfterWalk.action, "Click");
+    assert.deepEqual(seize.SeizeDeliveryJobsStartTrackingAfterWalk.next, [
+        "SeizeDeliveryJobsInDestinationMapAfterTracking",
+    ]);
+    assert.deepEqual(seize.SeizeDeliveryJobsInDestinationMapAfterTracking.all_of, [
+        "AutoDeliveryInTaskDestinationMap",
+    ]);
+    assert.deepEqual(seize.SeizeDeliveryJobsInDestinationMapAfterTracking.next, [
+        "SeizeDeliveryJobsReturnWorldAfterTracking",
+    ]);
+    assert.deepEqual(seize.SeizeDeliveryJobsReturnWorldAfterTracking.custom_action_param, {
+        sub: [
+            "SceneAnyEnterWorld",
+        ],
+        continue: false,
+        strict: true,
+    });
+    assert.deepEqual(seize.SeizeDeliveryJobsReturnWorldAfterTracking.next, [
+        "SeizeDeliveryJobsSuccessWalkDone",
+    ]);
     assert.deepEqual(seize.SeizeDeliveryJobsFullDelivery.anchor, {
-        SeizeDeliveryJobsAfterEnterCurrentJobDetail: "AutoDelivery",
         AutoDeliveryAfterSubmitGoods: "SeizeDeliveryJobsMain",
     });
+    assert.deepEqual(seize.SeizeDeliveryJobsFullDelivery.next, [
+        "AutoDelivery",
+    ]);
+    const seizeCommon = readGeneratedPipeline("SeizeDeliveryJobs", "SeizeDeliveryJobsCommon.json");
+    assert.notEqual(seizeCommon.__SeizeDeliveryJobsRecoViewCurrentJob, undefined);
+    for (const node of [
+        "SeizeDeliveryJobsEnterCurrentJobDetail",
+        "__SeizeDeliveryJobsReadyToViewCurrentJob",
+        "__SeizeDeliveryJobsViewCurrentJob",
+    ]) {
+        assert.equal(seizeCommon[node], undefined);
+    }
     assert.equal(seize.SeizeDeliveryJobsOpenCurrentJobForDestination, undefined);
     assert.equal(
         seize.SeizeDeliveryJobsDeliveryCannotTeleport.focus["Node.Recognition.Succeeded"],
