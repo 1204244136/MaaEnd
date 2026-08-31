@@ -7,13 +7,6 @@ import {fileURLToPath} from "node:url";
 import {parseJsonc, readJsonc} from "../jsonc.mjs";
 import {DELIVERY_JOB_FILL_ITEM_PRIORITY_COUNT, deliveryJobDepots, deliveryJobRegions} from "./model.mjs";
 
-const AUTO_DELIVERY_CONTROLLERS = [
-    "Win32-Front",
-    "Linux-Gamescope",
-    "Linux-ScreenCast",
-    "Linux-Wlroots",
-];
-
 const AUTO_DELIVERY_NAVIGATE_NODES = [
     "AutoDeliveryNavigateDepot",
     "AutoDeliveryNavigateDestination",
@@ -423,7 +416,7 @@ test("DeliveryJobs ordinary depot modes override delivery and cargo behavior", (
     }
 });
 
-test("DeliveryJobs exposes automatic delivery for supported depots with controller-scoped safety options", () => {
+test("DeliveryJobs exposes automatic delivery for supported depots with shared safety options", () => {
     const task = readGeneratedTask();
 
     for (const depot of deliveryJobDepots) {
@@ -473,7 +466,7 @@ test("DeliveryJobs exposes automatic delivery for supported depots with controll
         }
     }
 
-    assert.deepEqual(task.option.DeliveryJobsAutoDeliveryRiskAcknowledgement.controller, AUTO_DELIVERY_CONTROLLERS);
+    assert.equal(task.option.DeliveryJobsAutoDeliveryRiskAcknowledgement.controller, undefined);
     assert.equal(task.option.DeliveryJobsAutoDeliveryRiskAcknowledgement.default_case, "No");
     assert.deepEqual(
         task.option.DeliveryJobsAutoDeliveryRiskAcknowledgement.cases.map((item) => item.pipeline_override),
@@ -490,7 +483,7 @@ test("DeliveryJobs exposes automatic delivery for supported depots with controll
             },
         ],
     );
-    assert.deepEqual(task.option.DeliveryJobsAutoDeliveryPreferZipline.controller, AUTO_DELIVERY_CONTROLLERS);
+    assert.equal(task.option.DeliveryJobsAutoDeliveryPreferZipline.controller, undefined);
     assert.equal(task.option.DeliveryJobsAutoDeliveryPreferZipline.default_case, "No");
     for (const [
         index,
@@ -1061,6 +1054,36 @@ test("AutoDelivery ensures the delivery mission detail before branching", () => 
     assert.deepEqual(pickup.AutoDeliveryRetryNavigateDepot.next, [
         "AutoDeliveryCheckFetchGoodsButton",
     ]);
+    assert.equal(pickup.AutoDeliveryCheckFetchGoodsButton.recognition, "TemplateMatch");
+    assert.deepEqual(
+        pickup.AutoDeliveryCheckFetchGoodsButton.roi,
+        [
+            763,
+            349,
+            195,
+            270,
+        ],
+    );
+    assert.equal(pickup.AutoDeliveryCheckFetchGoodsButton.template, "AutoDelivery/FetchGoods.png");
+    assert.equal(pickup.AutoDeliveryCheckFetchGoodsButton.order_by, "Score");
+    assert.equal(pickup.AutoDeliveryCheckFetchGoodsButton.expected, undefined);
+    assert.deepEqual(
+        commonAdb.AutoDeliveryCheckFetchGoodsButton.roi,
+        [
+            720,
+            349,
+            240,
+            270,
+        ],
+    );
+    for (const resource of [
+        "resource",
+        "resource_adb",
+    ]) {
+        assert.ok(
+            existsSync(new URL(`../../../assets/${resource}/image/AutoDelivery/FetchGoods.png`, import.meta.url)),
+        );
+    }
     assert.deepEqual(pickup.AutoDeliveryCheckFetchGoodsButton.pre_wait_freezes, {
         time: 300,
         target: [
@@ -1073,9 +1096,10 @@ test("AutoDelivery ensures the delivery mission detail before branching", () => 
     assert.deepEqual(pickup.AutoDeliveryFetchGoodsButton.all_of, [
         "AutoDeliveryCheckFetchGoodsButton",
     ]);
-    assert.deepEqual(pickup.AutoDeliveryCheckCarryingGoods.next, [
+    assert.deepEqual(pickup.AutoDeliveryFetchGoodsButton.next, [
         "AutoDeliveryOpenMissionAfterFetchGoods",
     ]);
+    assert.equal(pickup.AutoDeliveryCheckCarryingGoods, undefined);
     assert.deepEqual(pickup.AutoDeliveryOpenMissionAfterFetchGoods.next, [
         "AutoDeliveryRecognizeDestination",
     ]);
@@ -1316,12 +1340,51 @@ test("AutoDelivery ensures the delivery mission detail before branching", () => 
     assert.deepEqual(delivery.AutoDeliveryRetryNavigateDestination.next, [
         "AutoDeliveryCheckSubmitGoodsButton",
     ]);
-    assert.deepEqual(delivery.AutoDeliveryCheckSubmitGoodsButton.pre_wait_freezes, {
-        time: 300,
-        target: [
+    assert.equal(delivery.AutoDeliveryCheckSubmitGoodsButton.recognition, "TemplateMatch");
+    assert.deepEqual(
+        delivery.AutoDeliveryCheckSubmitGoodsButton.roi,
+        [
             760,
             350,
             200,
+            270,
+        ],
+    );
+    assert.deepEqual(delivery.AutoDeliveryCheckSubmitGoodsButton.template, [
+        "AutoDelivery/SubmitGoods.png",
+        "AutoDelivery/SubmitGoods2.png",
+    ]);
+    assert.equal(delivery.AutoDeliveryCheckSubmitGoodsButton.threshold, 0.8);
+    assert.equal(delivery.AutoDeliveryCheckSubmitGoodsButton.order_by, "Score");
+    assert.equal(delivery.AutoDeliveryCheckSubmitGoodsButton.expected, undefined);
+    assert.deepEqual(
+        commonAdb.AutoDeliveryCheckSubmitGoodsButton.roi,
+        [
+            720,
+            349,
+            240,
+            270,
+        ],
+    );
+    for (const resource of [
+        "resource",
+        "resource_adb",
+    ]) {
+        for (const template of [
+            "SubmitGoods.png",
+            "SubmitGoods2.png",
+        ]) {
+            assert.ok(
+                existsSync(new URL(`../../../assets/${resource}/image/AutoDelivery/${template}`, import.meta.url)),
+            );
+        }
+    }
+    assert.deepEqual(delivery.AutoDeliveryCheckSubmitGoodsButton.pre_wait_freezes, {
+        time: 300,
+        target: [
+            763,
+            349,
+            195,
             270,
         ],
     });

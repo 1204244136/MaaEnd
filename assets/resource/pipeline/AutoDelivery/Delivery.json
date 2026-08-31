@@ -112,7 +112,7 @@
         "order_by": "Score"
     },
     "AutoDeliveryCheckSubmitGoodsButton": {
-        "desc": "在送货目标附近识别交互按钮，并等待交互按钮稳定",
+        "desc": "在送货目标附近识别交货图标，并等待交互提示区域稳定",
         "recognition": "TemplateMatch",
         "roi": [
             760,
@@ -121,17 +121,17 @@
             270
         ],
         "template": [
-            "AutoDelivery/SubmitGoods.png", // NPC 交货按钮
-            "AutoDelivery/SubmitGoods2.png" // 非 NPC 交货按钮
+            "AutoDelivery/SubmitGoods.png", // NPC 交货图标
+            "AutoDelivery/SubmitGoods2.png" // 非 NPC 交货图标
         ],
         "threshold": 0.8,
         "order_by": "Score",
         "pre_wait_freezes": {
             "time": 300,
             "target": [
-                760,
-                350,
-                200,
+                763,
+                349,
+                195,
                 270
             ]
         },
