@@ -70,8 +70,8 @@ Pipeline 里常见两种「数字 / 文本来源」：
 ### 它解决什么
 
 - 兼容扁平与 v2 节点 JSON：
-  - 扁平：`"recognition":"And","all_of":[...],"box_index":n`
-  - v2：`"recognition":{"type":"And","param":{"all_of":[...],"box_index":n}}`
+    - 扁平：`"recognition":"And","all_of":[...],"box_index":n`
+    - v2：`"recognition":{"type":"And","param":{"all_of":[...],"box_index":n}}`
 - 按节点原生 `box_index` 从 `CombinedResult` 取子结果。
 - 子项若仍是 And 节点名引用，会沿 `box_index` 链继续下钻（环路则报错）。
 
@@ -137,7 +137,7 @@ return ocrnum.Extract(selected)
 | ---- | -------------------------- |
 | 算术 | `+` `-` `*` `/` `%` |
 | 比较 | `<` `<=` `>` `>=` `==` `!=` |
-| 逻辑 | `&&` `||` `!` |
+| 逻辑 | `&&` ` | | ` `!` |
 | 分组 | `(...)` |
 
 字面量超出平台 `int` 范围时会钳制到 `IntMax` / `IntMin` 并打 warn，求值继续而不是直接失败（与 `ocrnum` 溢出策略一致）。
