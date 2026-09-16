@@ -1,6 +1,7 @@
 // OutpostTrading Task 模板数据
 
 import {readJsonc} from "../jsonc.mjs";
+import {compareItemDisplayOrder, itemIconPath} from "../utils/itemDisplayOrder.mjs";
 import {outpostTradingLocations, toPascalCase} from "./model.mjs";
 import {outpostTradingSelectableItems, outpostTradingSelectionData} from "./selection-data.mjs";
 
@@ -48,6 +49,7 @@ for (const item of outpostTradingSelectableItems) {
         id: item.id,
         name: item.name,
         label: localeKey ? `$item.${localeKey}` : null,
+        icon: itemIconPath(item.id),
     };
 }
 
@@ -93,7 +95,7 @@ const TASK_OPTIONS = [
     ...REGION_PREFIXES.map((regionPrefix) => `${regionPrefix}Sell`),
 ];
 
-// 独立保留规则使用所有据点货品的并集，不提供 Auto，并按游戏货架单价顺序展示。
+// 独立保留规则使用所有据点货品的并集，不提供 Auto；货品按“物品大类 → 稀有度升序”展示。
 // 具体货品 case 只通过 attach 注入 itemId；子 input 独占 custom_action_param，
 // 避免 MaaFramework 依次应用选项覆盖时完整替换同名字段。
 function buildReserveItemCases(slot) {
@@ -103,10 +105,11 @@ function buildReserveItemCases(slot) {
             label: "$task.OutpostTrading.ReserveNone",
         },
         ...Object.values(ITEMS)
-            .sort(compareItemsByUnitPrice(ITEM_PRICE_BY_ID))
+            .sort((left, right) => compareItemDisplayOrder(left.id, right.id))
             .map((item) => ({
                 name: item.name,
                 ...(item.label ? {label: item.label} : {}),
+                ...(item.icon ? {icon: item.icon} : {}),
                 option: [`SellProductReserveItem${slot}Mode`],
                 pipeline_override: {
                     [`OutpostTradingRegisterReserveRule${slot}`]: {
@@ -143,7 +146,7 @@ function buildReserveModeCases(slot) {
     ];
 }
 
-// 用户指定的六个槽位只调整对应地区的动态优先级。
+// 用户指定的六个槽位只调整对应地区的动态优先级；地区内货品按“物品大类 → 稀有度升序”展示。
 function buildPriorityItemCases(regionPrefix, slot) {
     const priceByItemID = PRIORITY_ITEM_PRICE_BY_REGION[regionPrefix] || new Map();
     return [
@@ -153,10 +156,11 @@ function buildPriorityItemCases(regionPrefix, slot) {
         },
         ...Object.values(ITEMS)
             .filter((item) => priceByItemID.has(item.id))
-            .sort(compareItemsByUnitPrice(priceByItemID))
+            .sort((left, right) => compareItemDisplayOrder(left.id, right.id))
             .map((item) => ({
                 name: item.name,
                 ...(item.label ? {label: item.label} : {}),
+                ...(item.icon ? {icon: item.icon} : {}),
                 pipeline_override: {
                     [`OutpostTrading${regionPrefix}RegisterPriorityItem${slot}`]: {
                         custom_action_param: {
