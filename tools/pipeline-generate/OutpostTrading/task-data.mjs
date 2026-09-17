@@ -3,7 +3,11 @@
 import {readJsonc} from "../jsonc.mjs";
 import {compareItemDisplayOrder, itemIconPath} from "../utils/itemDisplayOrder.mjs";
 import {outpostTradingLocations, toPascalCase} from "./model.mjs";
-import {outpostTradingSelectableItems, outpostTradingSelectionData} from "./selection-data.mjs";
+import {
+    outpostTradingActivityItemIDs,
+    outpostTradingSelectableItems,
+    outpostTradingSelectionData,
+} from "./selection-data.mjs";
 
 const zhCNLocale = readJsonc(new URL("../../../assets/locales/interface/zh_cn.json", import.meta.url));
 
@@ -96,6 +100,7 @@ const TASK_OPTIONS = [
 ];
 
 // 独立保留规则使用所有据点货品的并集，不提供 Auto；货品按“物品大类 → 稀有度升序”展示。
+// 活动物品按活动额度整批卖出，保留规则对其无效，因此不出现在保留选项中。
 // 具体货品 case 只通过 attach 注入 itemId；子 input 独占 custom_action_param，
 // 避免 MaaFramework 依次应用选项覆盖时完整替换同名字段。
 function buildReserveItemCases(slot) {
@@ -105,6 +110,7 @@ function buildReserveItemCases(slot) {
             label: "$task.OutpostTrading.ReserveNone",
         },
         ...Object.values(ITEMS)
+            .filter((item) => !outpostTradingActivityItemIDs.has(item.id))
             .sort((left, right) => compareItemDisplayOrder(left.id, right.id))
             .map((item) => ({
                 name: item.name,

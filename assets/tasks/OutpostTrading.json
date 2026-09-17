@@ -1465,6 +1465,244 @@
                     "label": "$task.OutpostTrading.ReserveNone"
                 },
                 {
+                    "name": "灼铜零件",
+                    "label": "$item.CopperEnr2Cmpt",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_copper_enr2_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选荞愈胶囊",
+                    "label": "$item.BuckCapsuleA",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "高容谷地电池",
+                    "label": "$item.HCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_proc_battery_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选柑实罐头",
+                    "label": "$item.CannedCitromeA",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_food_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容武陵电池",
+                    "label": "$item.SCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_proc_battery_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "赫铜零件",
+                    "label": "$item.HetonitePart",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_copper_enr_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容谷地电池",
+                    "label": "$item.SCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_proc_battery_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "重息壤",
+                    "label": "$item.HeavyXiranite",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_xiranite_enr_powder"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质荞愈胶囊",
+                    "label": "$item.BuckCapsuleB",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质柑实罐头",
+                    "label": "$item.CannedCitromeB",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_food_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容武陵电池",
+                    "label": "$item.LCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_proc_battery_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质芽针针剂",
+                    "label": "$item.YazhenSyringeA",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质锦草软饮",
+                    "label": "$item.JincaoTea",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_food_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "芽针针剂",
+                    "label": "$item.YazhenSyringeC",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "锦草软饮",
+                    "label": "$item.JincaoDrink",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_food_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容谷地电池",
+                    "label": "$item.LCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_proc_battery_1"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "荞愈胶囊",
+                    "label": "$item.BuckCapsuleC",
+                    "option": [
+                        "SellProductReserveItem1Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule1": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_1"
+                            }
+                        }
+                    }
+                },
+                {
                     "name": "柑实罐头",
                     "label": "$item.CannedCitromeC",
                     "icon": "resource/image/icon/item_bottled_food_1.png",
@@ -1942,6 +2180,244 @@
                 {
                     "name": "None",
                     "label": "$task.OutpostTrading.ReserveNone"
+                },
+                {
+                    "name": "灼铜零件",
+                    "label": "$item.CopperEnr2Cmpt",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_copper_enr2_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选荞愈胶囊",
+                    "label": "$item.BuckCapsuleA",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "高容谷地电池",
+                    "label": "$item.HCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_proc_battery_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选柑实罐头",
+                    "label": "$item.CannedCitromeA",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_food_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容武陵电池",
+                    "label": "$item.SCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_proc_battery_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "赫铜零件",
+                    "label": "$item.HetonitePart",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_copper_enr_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容谷地电池",
+                    "label": "$item.SCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_proc_battery_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "重息壤",
+                    "label": "$item.HeavyXiranite",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_xiranite_enr_powder"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质荞愈胶囊",
+                    "label": "$item.BuckCapsuleB",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质柑实罐头",
+                    "label": "$item.CannedCitromeB",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_food_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容武陵电池",
+                    "label": "$item.LCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_proc_battery_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质芽针针剂",
+                    "label": "$item.YazhenSyringeA",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质锦草软饮",
+                    "label": "$item.JincaoTea",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_food_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "芽针针剂",
+                    "label": "$item.YazhenSyringeC",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "锦草软饮",
+                    "label": "$item.JincaoDrink",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_food_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容谷地电池",
+                    "label": "$item.LCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_proc_battery_1"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "荞愈胶囊",
+                    "label": "$item.BuckCapsuleC",
+                    "option": [
+                        "SellProductReserveItem2Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule2": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_1"
+                            }
+                        }
+                    }
                 },
                 {
                     "name": "柑实罐头",
@@ -2423,6 +2899,244 @@
                     "label": "$task.OutpostTrading.ReserveNone"
                 },
                 {
+                    "name": "灼铜零件",
+                    "label": "$item.CopperEnr2Cmpt",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_copper_enr2_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选荞愈胶囊",
+                    "label": "$item.BuckCapsuleA",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "高容谷地电池",
+                    "label": "$item.HCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_proc_battery_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选柑实罐头",
+                    "label": "$item.CannedCitromeA",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_food_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容武陵电池",
+                    "label": "$item.SCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_proc_battery_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "赫铜零件",
+                    "label": "$item.HetonitePart",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_copper_enr_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容谷地电池",
+                    "label": "$item.SCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_proc_battery_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "重息壤",
+                    "label": "$item.HeavyXiranite",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_xiranite_enr_powder"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质荞愈胶囊",
+                    "label": "$item.BuckCapsuleB",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质柑实罐头",
+                    "label": "$item.CannedCitromeB",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_food_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容武陵电池",
+                    "label": "$item.LCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_proc_battery_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质芽针针剂",
+                    "label": "$item.YazhenSyringeA",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质锦草软饮",
+                    "label": "$item.JincaoTea",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_food_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "芽针针剂",
+                    "label": "$item.YazhenSyringeC",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "锦草软饮",
+                    "label": "$item.JincaoDrink",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_food_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容谷地电池",
+                    "label": "$item.LCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_proc_battery_1"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "荞愈胶囊",
+                    "label": "$item.BuckCapsuleC",
+                    "option": [
+                        "SellProductReserveItem3Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule3": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_1"
+                            }
+                        }
+                    }
+                },
+                {
                     "name": "柑实罐头",
                     "label": "$item.CannedCitromeC",
                     "icon": "resource/image/icon/item_bottled_food_1.png",
@@ -2900,6 +3614,244 @@
                 {
                     "name": "None",
                     "label": "$task.OutpostTrading.ReserveNone"
+                },
+                {
+                    "name": "灼铜零件",
+                    "label": "$item.CopperEnr2Cmpt",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_copper_enr2_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选荞愈胶囊",
+                    "label": "$item.BuckCapsuleA",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "高容谷地电池",
+                    "label": "$item.HCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_proc_battery_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选柑实罐头",
+                    "label": "$item.CannedCitromeA",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_food_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容武陵电池",
+                    "label": "$item.SCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_proc_battery_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "赫铜零件",
+                    "label": "$item.HetonitePart",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_copper_enr_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容谷地电池",
+                    "label": "$item.SCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_proc_battery_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "重息壤",
+                    "label": "$item.HeavyXiranite",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_xiranite_enr_powder"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质荞愈胶囊",
+                    "label": "$item.BuckCapsuleB",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质柑实罐头",
+                    "label": "$item.CannedCitromeB",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_food_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容武陵电池",
+                    "label": "$item.LCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_proc_battery_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质芽针针剂",
+                    "label": "$item.YazhenSyringeA",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质锦草软饮",
+                    "label": "$item.JincaoTea",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_food_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "芽针针剂",
+                    "label": "$item.YazhenSyringeC",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "锦草软饮",
+                    "label": "$item.JincaoDrink",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_food_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容谷地电池",
+                    "label": "$item.LCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_proc_battery_1"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "荞愈胶囊",
+                    "label": "$item.BuckCapsuleC",
+                    "option": [
+                        "SellProductReserveItem4Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule4": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_1"
+                            }
+                        }
+                    }
                 },
                 {
                     "name": "柑实罐头",
@@ -3381,6 +4333,244 @@
                     "label": "$task.OutpostTrading.ReserveNone"
                 },
                 {
+                    "name": "灼铜零件",
+                    "label": "$item.CopperEnr2Cmpt",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_copper_enr2_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选荞愈胶囊",
+                    "label": "$item.BuckCapsuleA",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "高容谷地电池",
+                    "label": "$item.HCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_proc_battery_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选柑实罐头",
+                    "label": "$item.CannedCitromeA",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_food_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容武陵电池",
+                    "label": "$item.SCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_proc_battery_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "赫铜零件",
+                    "label": "$item.HetonitePart",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_copper_enr_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容谷地电池",
+                    "label": "$item.SCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_proc_battery_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "重息壤",
+                    "label": "$item.HeavyXiranite",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_xiranite_enr_powder"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质荞愈胶囊",
+                    "label": "$item.BuckCapsuleB",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质柑实罐头",
+                    "label": "$item.CannedCitromeB",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_food_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容武陵电池",
+                    "label": "$item.LCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_proc_battery_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质芽针针剂",
+                    "label": "$item.YazhenSyringeA",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质锦草软饮",
+                    "label": "$item.JincaoTea",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_food_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "芽针针剂",
+                    "label": "$item.YazhenSyringeC",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "锦草软饮",
+                    "label": "$item.JincaoDrink",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_food_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容谷地电池",
+                    "label": "$item.LCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_proc_battery_1"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "荞愈胶囊",
+                    "label": "$item.BuckCapsuleC",
+                    "option": [
+                        "SellProductReserveItem5Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule5": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_1"
+                            }
+                        }
+                    }
+                },
+                {
                     "name": "柑实罐头",
                     "label": "$item.CannedCitromeC",
                     "icon": "resource/image/icon/item_bottled_food_1.png",
@@ -3858,6 +5048,244 @@
                 {
                     "name": "None",
                     "label": "$task.OutpostTrading.ReserveNone"
+                },
+                {
+                    "name": "灼铜零件",
+                    "label": "$item.CopperEnr2Cmpt",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_copper_enr2_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选荞愈胶囊",
+                    "label": "$item.BuckCapsuleA",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "高容谷地电池",
+                    "label": "$item.HCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_proc_battery_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "精选柑实罐头",
+                    "label": "$item.CannedCitromeA",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_food_3"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容武陵电池",
+                    "label": "$item.SCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_proc_battery_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "赫铜零件",
+                    "label": "$item.HetonitePart",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_copper_enr_cmpt"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "中容谷地电池",
+                    "label": "$item.SCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_proc_battery_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "重息壤",
+                    "label": "$item.HeavyXiranite",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_xiranite_enr_powder"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质荞愈胶囊",
+                    "label": "$item.BuckCapsuleB",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质柑实罐头",
+                    "label": "$item.CannedCitromeB",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_food_2"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容武陵电池",
+                    "label": "$item.LCWulingBattery",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_proc_battery_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质芽针针剂",
+                    "label": "$item.YazhenSyringeA",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "优质锦草软饮",
+                    "label": "$item.JincaoTea",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_food_5"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "芽针针剂",
+                    "label": "$item.YazhenSyringeC",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "锦草软饮",
+                    "label": "$item.JincaoDrink",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_food_4"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "低容谷地电池",
+                    "label": "$item.LCValleyBattery",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_proc_battery_1"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "荞愈胶囊",
+                    "label": "$item.BuckCapsuleC",
+                    "option": [
+                        "SellProductReserveItem6Mode"
+                    ],
+                    "pipeline_override": {
+                        "OutpostTradingRegisterReserveRule6": {
+                            "attach": {
+                                "item_id": "item_bottled_rec_hp_1"
+                            }
+                        }
+                    }
                 },
                 {
                     "name": "柑实罐头",

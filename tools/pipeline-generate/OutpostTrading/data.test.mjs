@@ -13,7 +13,7 @@ import {
     toPascalCase,
 } from "./model.mjs";
 import outpostTradingSellRows from "./sell-data.mjs";
-import {outpostTradingSelectionData} from "./selection-data.mjs";
+import {outpostTradingActivityItemIDs, outpostTradingSelectionData} from "./selection-data.mjs";
 import {outpostTradingTaskRows} from "./task-data.mjs";
 
 const root = outpostTradingTaskRows[0];
@@ -310,6 +310,26 @@ test("OutpostTrading 保留物品按物品大类与稀有度排序", () => {
         for (const itemCase of itemCases) {
             const registration = itemCase.pipeline_override[`OutpostTradingRegisterReserveRule${slot}`];
             assert.equal(itemCase.icon, itemIconPath(registration.attach.item_id));
+        }
+    }
+});
+
+test("OutpostTrading 保留选项排除活动物品", () => {
+    const activityItemIDs = new Set(outpostTradingActivityItemIDs);
+    assert.ok(activityItemIDs.size > 0);
+    for (const slot of [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+    ]) {
+        const itemIDs = root[`ReserveItemCases${slot}`]
+            .filter((entry) => entry.name !== "None")
+            .map((entry) => entry.pipeline_override[`OutpostTradingRegisterReserveRule${slot}`].attach.item_id);
+        for (const itemID of itemIDs) {
+            assert.equal(activityItemIDs.has(itemID), false, `reserve slot ${slot} keeps activity item ${itemID}`);
         }
     }
 });
